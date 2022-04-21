@@ -1,7 +1,7 @@
 import { Application, Response } from "express"
 import { IResponse } from "../core/routes/IResponse"
 import { IRoute } from "../core/routes/IRoute"
-import { signupSuccessful } from "../responses/authResponses"
+import { AuthController } from "../infrastructure/controllers/authController"
 
 export class AuthRoutes implements IRoute {
   private readonly base_route: string
@@ -19,11 +19,12 @@ export class AuthRoutes implements IRoute {
   }
 
   private createRoute(action: string) {
-    const response: IResponse = signupSuccessful()
+    const authController = new AuthController()
     const route = this.base_route + action
 
-    this.core.get(route, (_: unknown, res: Response) =>
+    this.core.get(route, (_: unknown, res: Response) => {
+      const response: IResponse = authController.signup()
       res.status(response.status_code).send(response)
-    )
+    })
   }
 }
