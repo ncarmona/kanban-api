@@ -1,8 +1,7 @@
-import express from "express"
+import express, { Application } from "express"
+import { router } from "./core/router"
 
-const app = express()
+const app: Application = express()
 const port = 5000
-app.get("/", (_, res) => {
-  res.status(200).send()
-})
+router(app)
 app.listen(port, () => console.log("it works"))
