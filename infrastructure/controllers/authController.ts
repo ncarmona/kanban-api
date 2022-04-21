@@ -13,7 +13,6 @@ export class AuthController {
       deleted: false,
       disabled: false,
       email: "fake@mail.com",
-      password: "",
     }
     const response: IResponse = signupSuccessful(data)
 
