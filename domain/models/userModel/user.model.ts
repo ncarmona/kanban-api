@@ -62,4 +62,11 @@ export class UserModel {
   public setCreatedAt(date: Date) {
     this._user.created_at = date
   }
+
+  public getPhoto(): string {
+    return this._user.photo
+  }
+  public setPhoto(photo: string) {
+    this._user.photo = photo
+  }
 }

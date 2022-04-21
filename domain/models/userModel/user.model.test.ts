@@ -12,6 +12,7 @@ describe("User model", () => {
     name: "user name",
     password: "secretpassword",
     modified_at: new Date(),
+    photo: "picture.png",
   }
   beforeEach(() => (userModel = new UserModel(user)))
   it("User without ID should no return user with ID", () => {
@@ -24,6 +25,7 @@ describe("User model", () => {
       name: "user name",
       password: "secretpassword",
       modified_at: new Date(),
+      photo: "picture.png",
     }
     const userModel: UserModel = new UserModel(user)
     const userID = userModel.getID()
@@ -110,5 +112,14 @@ describe("User model", () => {
     userModel.setCreatedAt(created_at)
 
     expect(userModel.getCreatedAt()).toStrictEqual(created_at)
+  })
+  it("User photo must be the same in the model and the IUser", () => {
+    expect(userModel.getPhoto()).toStrictEqual(user.photo)
+  })
+  it("User photo must be assigned with setPhoto", () => {
+    const photo = "photo2.png"
+    userModel.setPhoto(photo)
+
+    expect(userModel.getPhoto()).toStrictEqual(photo)
   })
 })
