@@ -1,20 +1,37 @@
-import { IUser } from "../../domain/interfaces/IUser"
 import { IResponse } from "../../core/routes/IResponse"
-import { signupSuccessful } from "../../responses/authResponses"
+import {
+  signupSuccessful,
+  invalidSignupEmail,
+  unexpectedError,
+  emailAlreadyExists,
+} from "../../responses/authResponses"
+import { AuthRepository } from "../repositories/AuthRepository"
+import { UserModel } from "../../domain/models/userModel/user.model"
+import { IAuth } from "../../core/models/IAuth"
+import { regexEmail } from "../../utils/regExpressions"
+import { IUser } from "../../domain/interfaces/IUser"
 
 export class AuthController {
-  signup(): IResponse {
-    const data: IUser = {
-      id: "",
-      name: "Noel",
-      photo: "photo.png",
-      modified_at: new Date(),
-      created_at: new Date(),
-      deleted: false,
-      disabled: false,
-      email: "fake@mail.com",
+  private readonly mongoDBRepository
+
+  constructor() {
+    this.mongoDBRepository = new AuthRepository()
+  }
+
+  async signup(auth: IAuth): Promise<IResponse> {
+    if (!regexEmail(auth.email)) invalidSignupEmail({ email: auth.email })
+
+    let response: IResponse
+
+    try {
+      const user: UserModel = await this.mongoDBRepository.signup(auth)
+      const userObject: IUser = user.getModel()
+      delete userObject.password
+      response = signupSuccessful(userObject)
+    } catch (error) {
+      if (error === "Email already exists.") response = emailAlreadyExists()
+      else response = unexpectedError()
     }
-    const response: IResponse = signupSuccessful(data)
 
     return response
   }
