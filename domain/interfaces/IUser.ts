@@ -8,6 +8,6 @@ export interface IUser
     ModelDeleteDisable,
     Model,
     IAuth {
-  name: string
-  photo: string
+  name?: string
+  photo?: string
 }

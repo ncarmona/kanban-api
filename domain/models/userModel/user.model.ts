@@ -4,14 +4,24 @@ export class UserModel {
   private _user: IUser
 
   constructor(user: IUser) {
-    this._user = { ...user }
+    this._user = {
+      created_at: user.created_at,
+      deleted: user.deleted,
+      disabled: user.disabled,
+      email: user.email,
+      modified_at: user.modified_at,
+      _id: user._id,
+      name: user.name,
+      password: user.password,
+      photo: user.photo,
+    }
   }
 
-  public getID(): string | undefined {
-    return this._user.id
+  public getId(): string | undefined {
+    return this._user._id
   }
-  public setID(id: string) {
-    this._user.id = id
+  public setId(_id: string) {
+    this._user._id = _id
   }
 
   public getName(): string {
@@ -53,14 +63,14 @@ export class UserModel {
     return this._user.modified_at
   }
   public setModifiedAt(date: Date) {
-    this._user.modified_at = date
+    this._user.modified_at = new Date(date)
   }
 
   public getCreatedAt(): Date {
     return this._user.created_at
   }
   public setCreatedAt(date: Date) {
-    this._user.created_at = date
+    this._user.created_at = new Date(date)
   }
 
   public getPhoto(): string {
@@ -68,5 +78,9 @@ export class UserModel {
   }
   public setPhoto(photo: string) {
     this._user.photo = photo
+  }
+
+  public getModel(): IUser {
+    return this._user
   }
 }
