@@ -1,4 +1,5 @@
-import { Application, Response } from "express"
+import { IAuth } from "../core/models/IAuth"
+import { Application, Response, Request } from "express"
 import { IResponse } from "../core/routes/IResponse"
 import { IRoute } from "../core/routes/IRoute"
 import { AuthController } from "../infrastructure/controllers/authController"
@@ -22,8 +23,13 @@ export class AuthRoutes implements IRoute {
     const authController = new AuthController()
     const route = this.base_route + action
 
-    this.core.get(route, (_: unknown, res: Response) => {
-      const response: IResponse = authController.signup()
+    this.core.post(route, async (req: Request, res: Response) => {
+      const { email, password } = req.body
+      const auth: IAuth = {
+        email,
+        password,
+      }
+      const response: IResponse = await authController.signup(auth)
       res.status(response.status_code).send(response)
     })
   }
