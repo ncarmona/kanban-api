@@ -4,8 +4,12 @@ const schema = new Schema({
   email: {
     type: String,
     unique: true,
+    required: true,
   },
-  password: String,
+  password: {
+    type: String,
+    required: true,
+  },
   disabled: {
     type: Boolean,
     default: true,
