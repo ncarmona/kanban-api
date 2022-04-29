@@ -3,6 +3,7 @@ import { Application, Response, Request } from "express"
 import { IResponse } from "../core/routes/IResponse"
 import { IRoute } from "../core/routes/IRoute"
 import { AuthController } from "../infrastructure/controllers/authController"
+import { requiredParameters } from "../core/middlewares"
 
 export class AuthRoutes implements IRoute {
   private readonly base_route: string
@@ -22,8 +23,9 @@ export class AuthRoutes implements IRoute {
   private createRoute(action: string) {
     const authController = new AuthController()
     const route = this.base_route + action
+    const middlewares = [requiredParameters(["email", "password"])]
 
-    this.core.post(route, async (req: Request, res: Response) => {
+    this.core.post(route, middlewares, async (req: Request, res: Response) => {
       const { email, password } = req.body
       const auth: IAuth = {
         email,
