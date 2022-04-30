@@ -16,14 +16,6 @@ export function invalidSignupEmail(data: unknown): IResponse {
   }
 }
 
-export function unexpectedError(): IResponse {
-  return {
-    data: {},
-    message: "Unexpected error, check logs for more details.",
-    status_code: 500,
-  }
-}
-
 export function emailAlreadyExists(): IResponse {
   return {
     data: {},

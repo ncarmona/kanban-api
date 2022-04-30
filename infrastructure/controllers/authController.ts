@@ -2,9 +2,9 @@ import { IResponse } from "../../core/routes/IResponse"
 import {
   signupSuccessful,
   invalidSignupEmail,
-  unexpectedError,
   emailAlreadyExists,
 } from "../../responses/authResponses"
+import { unexpectedError } from "../../core/responses/responses"
 import { MongoDBAuthRepository } from "../repositories/mongoDBauthRepository"
 import { AuthRepository } from "../repositories/authRepository"
 import { UserModel } from "../../domain/models/userModel/user.model"

@@ -16,3 +16,11 @@ export function missingParameters(
     message,
   }
 }
+
+export function unexpectedError(): IResponse {
+  return {
+    data: {},
+    message: "Unexpected error, check logs for more details.",
+    status_code: 500,
+  }
+}
