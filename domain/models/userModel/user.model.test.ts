@@ -4,7 +4,7 @@ import { UserModel } from "./user.model"
 describe("User model", () => {
   let userModel: UserModel
   const user: IUser = {
-    id: "1",
+    _id: "1",
     created_at: new Date(),
     deleted: false,
     disabled: false,
@@ -28,20 +28,20 @@ describe("User model", () => {
       photo: "picture.png",
     }
     const userModel: UserModel = new UserModel(user)
-    const userID = userModel.getID()
+    const userID = userModel.getId()
 
     expect(userID).toBeUndefined()
   })
   it("User with ID should no return user with ID", () => {
-    const userID = userModel.getID()
+    const userID = userModel.getId()
 
-    expect(userID).toBe(user.id)
+    expect(userID).toBe(user._id)
   })
   it("Set ID should assign an ID to user", () => {
     const expectedID = "2"
-    userModel.setID(expectedID)
+    userModel.setId(expectedID)
 
-    expect(userModel.getID()).toBe(expectedID)
+    expect(userModel.getId()).toBe(expectedID)
   })
 
   it("User name must be the same in the model and the IUser", () => {
