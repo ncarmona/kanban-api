@@ -1,4 +1,8 @@
-import { signupSuccessful, invalidSignupEmail } from "./authResponses"
+import {
+  signupSuccessful,
+  invalidSignupEmail,
+  emailAlreadyExists,
+} from "./authResponses"
 import { IUser } from "../domain/interfaces/IUser"
 import { IResponse } from "../core/routes/IResponse"
 
@@ -45,5 +49,23 @@ describe("Auth responses. InvalidSignupEmail", () => {
   })
   it("Data must be the same as pased by parameter.", () => {
     expect(response.data).toStrictEqual(data)
+  })
+})
+
+describe("Auth responses. emailAlreadyExists", () => {
+  const message = "Email already exists."
+  const status_code = 500
+  let response: IResponse
+
+  beforeAll(() => {
+    response = emailAlreadyExists()
+  })
+
+  it("Message must be 'Email already exists'", () => {
+    expect(response.message).toStrictEqual(message)
+  })
+
+  it("Status field must be 500", () => {
+    expect(response.status_code).toBe(status_code)
   })
 })
