@@ -1,6 +1,7 @@
+import { IUser } from "../domain/interfaces/IUser"
 import { IResponse } from "../core/routes/IResponse"
 
-export function signupSuccessful(data: unknown): IResponse {
+export function signupSuccessful(data: IUser): IResponse {
   return {
     data,
     message: "User created successfully",
