@@ -1,10 +1,10 @@
-import { IAuth } from "../core/models/IAuth"
+import { IAuth } from "@core/models/IAuth"
 import { Application, Response, Request } from "express"
-import { IResponse } from "../core/routes/IResponse"
-import { IRoute } from "../core/routes/IRoute"
-import { AuthController } from "../infrastructure/controllers/authController"
-import { requiredParameters } from "../core/middlewares"
-import { allowAll } from "../core/cors"
+import { IResponse } from "@core/routes/IResponse"
+import { IRoute } from "@core/routes/IRoute"
+import { AuthController } from "@controllers/authController"
+import { requiredParameters } from "@core/middlewares"
+import { allowAll } from "@core/cors"
 import cors from "cors"
 
 export class AuthRoutes implements IRoute {

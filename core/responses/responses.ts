@@ -1,4 +1,4 @@
-import { IResponse } from "../routes/IResponse"
+import { IResponse } from "@core/routes/IResponse"
 export function missingParameters(
   parameters: string[],
   requiredParameters: string[]

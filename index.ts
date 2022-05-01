@@ -1,4 +1,6 @@
 require("module-alias/register")
+import { IConnector } from "@core/repository/connectors/IConnector"
+import { MongoDBConnector } from "@core/repository/connectors/MongoDBConnector"
 import express, { Application } from "express"
 import bodyParser from "body-parser"
 import { router } from "./core/router"

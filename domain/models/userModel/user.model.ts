@@ -1,4 +1,4 @@
-import { IUser } from "../../interfaces/IUser"
+import { IUser } from "@interfaces/IUser"
 
 export class UserModel {
   private _user: IUser

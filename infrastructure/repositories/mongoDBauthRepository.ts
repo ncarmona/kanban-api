@@ -1,11 +1,11 @@
-import { IUser } from "../../domain/interfaces/IUser"
-import { UserModel } from "../../domain/models/userModel/user.model"
-import { IConnector } from "../../core/repository/connectors/IConnector"
-import { MongoDBConnector } from "../../core/repository/connectors/MongoDBConnector"
-import { IAuth } from "../../core/models/IAuth"
-import { mongoDBUser } from "../../core/repository/MongoDB/Schemas/User"
+import { IUser } from "@interfaces/IUser"
+import { UserModel } from "@models/userModel/user.model"
+import { IConnector } from "@core/repository/connectors/IConnector"
+import { MongoDBConnector } from "@core/repository/connectors/MongoDBConnector"
+import { IAuth } from "@core/models/IAuth"
+import { mongoDBUser } from "@core/repository/MongoDB/Schemas/User"
 import { MongooseError } from "mongoose"
-import { AuthRepository } from "./authRepository"
+import { AuthRepository } from "@repositories/authRepository"
 
 export class MongoDBAuthRepository implements AuthRepository {
   private readonly connector: IConnector

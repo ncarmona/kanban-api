@@ -1,5 +1,5 @@
-import { IUser } from "../domain/interfaces/IUser"
-import { IResponse } from "../core/routes/IResponse"
+import { IUser } from "@interfaces/IUser"
+import { IResponse } from "@core/routes/IResponse"
 
 export function signupSuccessful(data: IUser): IResponse {
   return {
