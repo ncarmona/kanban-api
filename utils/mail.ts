@@ -22,5 +22,6 @@ const transporter = createTransport(mailerConfiguration)
 export function send(
   mail: Mail.Options
 ): Promise<SMTPTransport.SentMessageInfo> {
+  mail.from = user
   return transporter.sendMail(mail)
 }
