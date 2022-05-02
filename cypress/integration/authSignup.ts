@@ -2,7 +2,7 @@ import {} from "cypress"
 import { IResponse } from "../../core/routes/IResponse"
 
 describe("AuthSignup", () => {
-  it("invalid parameters must display error", () => {
+  it.skip("invalid parameters must display error", () => {
     const message =
       "Missing parameters. Passed parameters: emaile, password. Required parameters: email, password"
     cy.request({
@@ -19,8 +19,21 @@ describe("AuthSignup", () => {
       expect(response.body.message).to.eq(message)
     })
   })
-  it.skip("Missing email must display error", () => {
-    cy.visit("https://example.cypress.io")
+  it("Missing email must display error", () => {
+    const message =
+      "Missing parameters. Passed parameters: password. Required parameters: email, password"
+    cy.request({
+      url: "http://localhost:5000/auth/signup",
+      method: "POST",
+      failOnStatusCode: false,
+      body: {
+        password: "12344",
+      },
+    }).then((response: Cypress.Response<IResponse>) => {
+      expect(response.status).to.eq(500)
+      expect(response.body.status_code).to.eq(500)
+      expect(response.body.message).to.eq(message)
+    })
   })
   it.skip("Missing password must display error", () => {
     cy.visit("https://example.cypress.io")
