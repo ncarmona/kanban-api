@@ -2,7 +2,7 @@ import {} from "cypress"
 import { IResponse } from "../../core/routes/IResponse"
 
 describe("AuthSignup", () => {
-  it.skip("invalid parameters must display error", () => {
+  it("invalid parameters must display error", () => {
     const message =
       "Missing parameters. Passed parameters: emaile, password. Required parameters: email, password"
     cy.request({
@@ -19,7 +19,7 @@ describe("AuthSignup", () => {
       expect(response.body.message).to.eq(message)
     })
   })
-  it.skip("Missing email must display error", () => {
+  it("Missing email must display error", () => {
     const message =
       "Missing parameters. Passed parameters: password. Required parameters: email, password"
     cy.request({
@@ -51,10 +51,7 @@ describe("AuthSignup", () => {
       expect(response.body.message).to.eq(message)
     })
   })
-  it.skip("Existing email display error", () => {
-    cy.visit("https://example.cypress.io")
-  })
-  it.skip("Non existing email, email and password in the req must create user", () => {
+  it("Non existing email, email and password in the req must create user", () => {
     const expectedMessage = "User created successfully"
     cy.request("POST", "http://localhost:5000/auth/signup", {
       email: "nonfake@mail.com",
@@ -70,6 +67,22 @@ describe("AuthSignup", () => {
       expect(response.body.data).to.haveOwnProperty("deleted", false)
       expect(response.body.data).to.haveOwnProperty("disabled", true)
 
+      expect(response.body.message).to.eq(expectedMessage)
+    })
+  })
+  it("Existing email display error", () => {
+    const expectedMessage = "Email already exists."
+    cy.request({
+      url: "http://localhost:5000/auth/signup",
+      method: "POST",
+      failOnStatusCode: false,
+      body: {
+        email: "nonfake@mail.com",
+        password: "12344",
+      },
+    }).then((response: Cypress.Response<IResponse>) => {
+      expect(response.status).to.eq(500)
+      expect(response.body.status_code).to.eq(500)
       expect(response.body.message).to.eq(expectedMessage)
     })
   })
