@@ -1,3 +1,4 @@
+import { randomUUID } from "crypto"
 import { Schema, model } from "mongoose"
 
 const schema = new Schema({
@@ -25,6 +26,10 @@ const schema = new Schema({
   created_at: {
     type: Date,
     default: Date.now(),
+  },
+  activation_token: {
+    type: String,
+    default: randomUUID().toString(),
   },
   name: String,
   photo: String,
