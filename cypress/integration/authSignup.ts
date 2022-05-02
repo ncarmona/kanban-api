@@ -19,7 +19,7 @@ describe("AuthSignup", () => {
       expect(response.body.message).to.eq(message)
     })
   })
-  it("Missing email must display error", () => {
+  it.skip("Missing email must display error", () => {
     const message =
       "Missing parameters. Passed parameters: password. Required parameters: email, password"
     cy.request({
@@ -35,8 +35,21 @@ describe("AuthSignup", () => {
       expect(response.body.message).to.eq(message)
     })
   })
-  it.skip("Missing password must display error", () => {
-    cy.visit("https://example.cypress.io")
+  it("Missing password must display error", () => {
+    const message =
+      "Missing parameters. Passed parameters: email. Required parameters: email, password"
+    cy.request({
+      url: "http://localhost:5000/auth/signup",
+      method: "POST",
+      failOnStatusCode: false,
+      body: {
+        email: "hello@noelcarmona.com",
+      },
+    }).then((response: Cypress.Response<IResponse>) => {
+      expect(response.status).to.eq(500)
+      expect(response.body.status_code).to.eq(500)
+      expect(response.body.message).to.eq(message)
+    })
   })
   it.skip("Existing email display error", () => {
     cy.visit("https://example.cypress.io")
