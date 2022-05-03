@@ -2,6 +2,7 @@ import {
   signupSuccessful,
   invalidSignupEmail,
   emailAlreadyExists,
+  userAlreadyActivated
 } from "./authResponses"
 import { IUser } from "../domain/interfaces/IUser"
 import { IResponse } from "../core/routes/IResponse"
@@ -66,6 +67,23 @@ describe("Auth responses. emailAlreadyExists", () => {
   })
 
   it("Status field must be 500", () => {
+    expect(response.status_code).toBe(status_code)
+  })
+})
+describe("Auth responses. userAlreadyActivated", () => {
+  const message = "User was activated already or it does not exists."
+  const status_code = 404
+  let response: IResponse
+
+  beforeAll(() => {
+    response = userAlreadyActivated()
+  })
+
+  it("Message must be 'Email already exists'", () => {
+    expect(response.message).toStrictEqual(message)
+  })
+
+  it("Status field must be 404", () => {
     expect(response.status_code).toBe(status_code)
   })
 })

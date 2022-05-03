@@ -24,3 +24,22 @@ export function emailAlreadyExists(): IResponse {
     status_code: 500,
   }
 }
+
+export function activationSuccessful(email: string): IResponse {
+  return {
+    data: {},
+    message:
+      "Account assigned with email " +
+      email +
+      " has been activated successfully.",
+    status_code: 200,
+  }
+}
+
+export function userAlreadyActivated(): IResponse {
+  return {
+    data: {},
+    message: "User was activated already or it does not exists.",
+    status_code: 404,
+  }
+}
