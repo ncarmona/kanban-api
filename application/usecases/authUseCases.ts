@@ -12,4 +12,8 @@ export class AuthUseCases {
   signup(auth: IAuth): Promise<UserModel> {
     return this.database.signup(auth)
   }
+
+  activate(auth: IAuth): Promise<UserModel> {
+    return this.database.userActivation(auth)
+  }
 }
