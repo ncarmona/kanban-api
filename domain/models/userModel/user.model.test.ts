@@ -13,6 +13,7 @@ describe("User model", () => {
     password: "secretpassword",
     modified_at: new Date(),
     photo: "picture.png",
+    activation_token: "twegewgegsdg",
   }
   beforeEach(() => (userModel = new UserModel(user)))
   it("User without ID should no return user with ID", () => {
@@ -26,6 +27,7 @@ describe("User model", () => {
       password: "secretpassword",
       modified_at: new Date(),
       photo: "picture.png",
+      activation_token: "twegewgegsdg",
     }
     const userModel: UserModel = new UserModel(user)
     const userID = userModel.getId()
@@ -121,5 +123,14 @@ describe("User model", () => {
     userModel.setPhoto(photo)
 
     expect(userModel.getPhoto()).toStrictEqual(photo)
+  })
+  it("User activation token must be the same in the model and the IUser", () => {
+    expect(userModel.getActivationToken()).toStrictEqual(user.activation_token)
+  })
+  it("User activation token must be assigned with setPhoto", () => {
+    const activation_token = "sdggdsgdshdfhfh"
+    userModel.setActivationToken(activation_token)
+
+    expect(userModel.getActivationToken()).toStrictEqual(activation_token)
   })
 })

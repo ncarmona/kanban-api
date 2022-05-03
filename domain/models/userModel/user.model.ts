@@ -14,6 +14,7 @@ export class UserModel {
       name: user.name,
       password: user.password,
       photo: user.photo,
+      activation_token: user.activation_token,
     }
   }
 
@@ -78,6 +79,13 @@ export class UserModel {
   }
   public setPhoto(photo: string) {
     this._user.photo = photo
+  }
+
+  public getActivationToken(): string {
+    return this._user.activation_token
+  }
+  public setActivationToken(activationToken: string) {
+    this._user.activation_token = activationToken
   }
 
   public getModel(): IUser {
