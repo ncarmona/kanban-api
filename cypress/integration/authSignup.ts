@@ -54,7 +54,7 @@ describe("AuthSignup", () => {
   it("Non existing email, email and password in the req must create user", () => {
     const expectedMessage = "User created successfully"
     cy.request("POST", "http://localhost:5000/auth/signup", {
-      email: "nonfake@mail.com",
+      email: "ncarm89@gmail.com",
       password: "12344",
     }).then((response: Cypress.Response<IResponse>) => {
       expect(response.status).to.eq(200)
@@ -63,7 +63,10 @@ describe("AuthSignup", () => {
       expect(response.body.data).to.haveOwnProperty("_id")
       expect(response.body.data).to.haveOwnProperty("modified_at")
       expect(response.body.data).to.haveOwnProperty("created_at")
-      expect(response.body.data).to.haveOwnProperty("email", "nonfake@mail.com")
+      expect(response.body.data).to.haveOwnProperty(
+        "email",
+        "ncarm89@gmail.com"
+      )
       expect(response.body.data).to.haveOwnProperty("deleted", false)
       expect(response.body.data).to.haveOwnProperty("disabled", true)
 
@@ -77,7 +80,7 @@ describe("AuthSignup", () => {
       method: "POST",
       failOnStatusCode: false,
       body: {
-        email: "nonfake@mail.com",
+        email: "ncarm89@gmail.com",
         password: "12344",
       },
     }).then((response: Cypress.Response<IResponse>) => {
