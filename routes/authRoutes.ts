@@ -3,7 +3,7 @@ import { Application, Response, Request } from "express"
 import { IResponse } from "@core/routes/IResponse"
 import { IRoute } from "@core/routes/IRoute"
 import { AuthController } from "@controllers/authController"
-import { requiredParameters } from "@core/middlewares"
+import { requiredParameters, RequestObject } from "@core/middlewares"
 import { allowAll } from "@core/cors"
 import cors from "cors"
 
@@ -26,7 +26,7 @@ export class AuthRoutes implements IRoute {
     const authController = new AuthController()
     const route = this.base_route + action
     const middlewares = [
-      requiredParameters(["email", "password"]),
+      requiredParameters(["email", "password"], RequestObject.BODY),
       cors(allowAll),
     ]
 
