@@ -37,4 +37,21 @@ export class MongoDBAuthRepository implements AuthRepository {
         })
     })
   }
+
+  async userActivation(auth: IAuth): Promise<UserModel> {
+    return new Promise((resolve, reject) => {
+      const { email, activation_token } = auth
+      mongoDBUser
+        .findOneAndUpdate(
+          { email, activation_token },
+          { disabled: false, $unset: { activation_token: 1 } }
+        )
+        .then((u) => {
+          u === null
+            ? reject("User already activated")
+            : resolve(new UserModel(u))
+        })
+        .catch((e: MongooseError) => reject(e))
+    })
+  }
 }
