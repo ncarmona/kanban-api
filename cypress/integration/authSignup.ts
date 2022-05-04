@@ -156,4 +156,20 @@ describe("Activate account", () => {
       expect(response.body.message).to.eq(message)
     })
   })
+  it("Activate user with invalid email", () => {
+    const message = "User was activated already or it does not exists."
+    cy.request({
+      method: "GET",
+      url: "http://localhost:5000/auth/activation",
+      failOnStatusCode: false,
+      qs: {
+        email: "noelcarmona@gmail.com",
+        activation_token: "123456",
+      },
+    }).then((response: Cypress.Response<IResponse>) => {
+      expect(response.status).to.eq(404)
+      expect(response.body.status_code).to.eq(404)
+      expect(response.body.message).to.eq(message)
+    })
+  })
 })
