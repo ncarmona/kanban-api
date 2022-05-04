@@ -59,7 +59,6 @@ export class MongoDBAuthRepository implements AuthRepository {
     return new Promise((resolve, reject) => {
       const user: IUser = auth as IUser
       user.deleted = false
-      console.log(user)
       const filter: FilterQuery<IUser> = user
       mongoDBUser
         .findOne(filter)
