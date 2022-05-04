@@ -21,6 +21,7 @@ export class AuthRoutes implements IRoute {
   routes(): void {
     this.createRoute("/signup")
     this.activateAccount("/activation")
+    this.signin("/signin")
   }
 
   private createRoute(action: string) {
@@ -55,6 +56,23 @@ export class AuthRoutes implements IRoute {
         activation_token: req.query.activation_token as string,
       }
       const response: IResponse = await authController.activation(auth)
+      res.status(response.status_code).send(response)
+    })
+  }
+  private signin(action: string) {
+    const authController = new AuthController()
+    const route = this.base_route + action
+    const middlewares = [
+      requiredParameters(["email", "password"], RequestObject.BODY),
+      cors(allowAll),
+    ]
+    this.core.get(route, middlewares, async (req: Request, res: Response) => {
+      const { email, password } = req.body
+      const auth: IAuth = {
+        email,
+        password,
+      }
+      const response: IResponse = await authController.signin(auth)
       res.status(response.status_code).send(response)
     })
   }
