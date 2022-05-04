@@ -172,4 +172,21 @@ describe("Activate account", () => {
       expect(response.body.message).to.eq(message)
     })
   })
+  it("Activate user", () => {
+    const message =
+      "Account assigned with email ncarm89@gmail.com has been activated successfully."
+    cy.request({
+      method: "GET",
+      url: "http://localhost:5000/auth/activation",
+      failOnStatusCode: false,
+      qs: {
+        email: "ncarm89@gmail.com",
+        activation_token: "123456",
+      },
+    }).then((response: Cypress.Response<IResponse>) => {
+      expect(response.status).to.eq(200)
+      expect(response.body.status_code).to.eq(200)
+      expect(response.body.message).to.eq(message)
+    })
+  })
 })
