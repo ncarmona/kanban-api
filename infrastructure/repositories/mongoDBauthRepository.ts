@@ -6,7 +6,7 @@ import { IAuth } from "@core/models/IAuth"
 import { mongoDBUser } from "@core/repository/MongoDB/Schemas/User"
 import { MongooseError } from "mongoose"
 import { AuthRepository } from "@repositories/authRepository"
-
+import { FilterQuery } from "mongoose"
 export class MongoDBAuthRepository implements AuthRepository {
   private readonly connector: IConnector
 
@@ -51,6 +51,21 @@ export class MongoDBAuthRepository implements AuthRepository {
             ? reject("User already activated")
             : resolve(new UserModel(u))
         })
+        .catch((e: MongooseError) => reject(e))
+    })
+  }
+
+  async signin(auth: IAuth): Promise<UserModel> {
+    return new Promise((resolve, reject) => {
+      const user: IUser = auth as IUser
+      user.deleted = false
+      console.log(user)
+      const filter: FilterQuery<IUser> = user
+      mongoDBUser
+        .findOne(filter)
+        .then((u: IUser) =>
+          u === null ? reject(null) : resolve(new UserModel(u))
+        )
         .catch((e: MongooseError) => reject(e))
     })
   }
