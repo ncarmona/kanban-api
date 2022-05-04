@@ -1,5 +1,6 @@
 import { randomUUID } from "crypto"
 import { Schema, model } from "mongoose"
+import { environmentIs, Environments } from "@utils/environment"
 
 const schema = new Schema({
   email: {
@@ -29,7 +30,11 @@ const schema = new Schema({
   },
   activation_token: {
     type: String,
-    default: randomUUID().toString(),
+    default: function () {
+      return environmentIs(Environments.TEST)
+        ? "123456"
+        : randomUUID().toString()
+    },
   },
   name: String,
   photo: String,
