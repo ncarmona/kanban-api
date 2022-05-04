@@ -15,6 +15,7 @@ import { regexEmail } from "@utils/regExpressions"
 import { IUser } from "@interfaces/IUser"
 import { AuthUseCases } from "@usecases/authUseCases"
 import { send } from "@utils/mail"
+import { Environments, environmentIs } from "@utils/environment"
 import Mail from "nodemailer/lib/mailer"
 
 export class AuthController {
@@ -52,7 +53,7 @@ export class AuthController {
     try {
       const user: UserModel = await this.authUseCases.signup(auth)
       const userObject: IUser = user.getModel()
-      this.sendActivationEmail(userObject)
+      if (environmentIs(Environments.PROD)) this.sendActivationEmail(userObject)
 
       delete userObject.password
       delete userObject.activation_token
