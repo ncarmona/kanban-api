@@ -43,3 +43,30 @@ export function userAlreadyActivated(): IResponse {
     status_code: 404,
   }
 }
+
+export function userDisabled(email: string): IResponse {
+  return {
+    data: {},
+    message:
+      "User with email " +
+      email +
+      " has been disabled. Contact with administration for further information.",
+    status_code: 404,
+  }
+}
+
+export function userSigninSuccessfully(data: IUser): IResponse {
+  return {
+    data,
+    message: "User signin successfully.",
+    status_code: 200,
+  }
+}
+
+export function userDoesNotExists(): IResponse {
+  return {
+    data: {},
+    message: "User does not exists.",
+    status_code: 404,
+  }
+}
