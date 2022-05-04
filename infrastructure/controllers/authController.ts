@@ -5,6 +5,9 @@ import {
   emailAlreadyExists,
   activationSuccessful,
   userAlreadyActivated,
+  userDisabled,
+  userSigninSuccessfully,
+  userDoesNotExists,
 } from "@responses/authResponses"
 import { unexpectedError } from "@core/responses/responses"
 import { MongoDBAuthRepository } from "@repositories/mongoDBauthRepository"
@@ -75,6 +78,20 @@ export class AuthController {
     } catch (error) {
       if (error === "User already activated") response = userAlreadyActivated()
       else response = unexpectedError()
+    }
+    return response
+  }
+  async signin(auth: IAuth): Promise<IResponse> {
+    let response: IResponse
+
+    try {
+      const user: UserModel = await this.authUseCases.signin(auth)
+      response = user.getDisabled()
+        ? userDisabled(user.getEmail())
+        : userSigninSuccessfully(user.getModel())
+    } catch (error) {
+      console.log(error)
+      if (error === null) response = userDoesNotExists()
     }
     return response
   }
