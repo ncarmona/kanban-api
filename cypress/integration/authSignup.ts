@@ -108,4 +108,20 @@ describe("Activate account", () => {
       expect(response.body.message).to.eq(message)
     })
   })
+  it("Missing email parameter must display error", () => {
+    const message =
+      "Missing parameters. Passed parameters: activation_token. Required parameters: email, activation_token"
+    cy.request({
+      method: "GET",
+      url: "http://localhost:5000/auth/activation",
+      failOnStatusCode: false,
+      qs: {
+        activation_token: "123456",
+      },
+    }).then((response: Cypress.Response<IResponse>) => {
+      expect(response.status).to.eq(500)
+      expect(response.body.status_code).to.eq(500)
+      expect(response.body.message).to.eq(message)
+    })
+  })
 })
