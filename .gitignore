@@ -2,3 +2,5 @@ node_modules
 dist
 docker
 .env
+private.key
+public.key
