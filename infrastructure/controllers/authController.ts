@@ -33,7 +33,7 @@ export class AuthController {
   //TODO: ActivationURL must be generated using environment server url.
   private async sendActivationEmail(user: IUser) {
     const activationURL =
-      "http://localhost:5000/auth/activation?email=" +
+      "https://localhost:5000/auth/activation?email=" +
       user.email +
       "&activation_token=" +
       user.activation_token

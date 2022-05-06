@@ -6,7 +6,7 @@ describe("AuthSignup", () => {
     const message =
       "Missing parameters. Passed parameters: emaile, password. Required parameters: email, password"
     cy.request({
-      url: "http://localhost:5000/auth/signup",
+      url: "https://localhost:5000/auth/signup",
       method: "POST",
       failOnStatusCode: false,
       body: {
@@ -23,7 +23,7 @@ describe("AuthSignup", () => {
     const message =
       "Missing parameters. Passed parameters: password. Required parameters: email, password"
     cy.request({
-      url: "http://localhost:5000/auth/signup",
+      url: "https://localhost:5000/auth/signup",
       method: "POST",
       failOnStatusCode: false,
       body: {
@@ -39,7 +39,7 @@ describe("AuthSignup", () => {
     const message =
       "Missing parameters. Passed parameters: email. Required parameters: email, password"
     cy.request({
-      url: "http://localhost:5000/auth/signup",
+      url: "https://localhost:5000/auth/signup",
       method: "POST",
       failOnStatusCode: false,
       body: {
@@ -53,7 +53,7 @@ describe("AuthSignup", () => {
   })
   it("Non existing email, email and password in the req must create user", () => {
     const expectedMessage = "User created successfully"
-    cy.request("POST", "http://localhost:5000/auth/signup", {
+    cy.request("POST", "https://localhost:5000/auth/signup", {
       email: "ncarm89@gmail.com",
       password: "12344",
     }).then((response: Cypress.Response<IResponse>) => {
@@ -76,7 +76,7 @@ describe("AuthSignup", () => {
   it("Existing email display error", () => {
     const expectedMessage = "Email already exists."
     cy.request({
-      url: "http://localhost:5000/auth/signup",
+      url: "https://localhost:5000/auth/signup",
       method: "POST",
       failOnStatusCode: false,
       body: {
@@ -96,7 +96,7 @@ describe("Activate account", () => {
       "Missing parameters. Passed parameters: emaile, activation_token. Required parameters: email, activation_token"
     cy.request({
       method: "GET",
-      url: "http://localhost:5000/auth/activation",
+      url: "https://localhost:5000/auth/activation",
       failOnStatusCode: false,
       qs: {
         emaile: "ncarm89@gmail.com",
@@ -113,7 +113,7 @@ describe("Activate account", () => {
       "Missing parameters. Passed parameters: activation_token. Required parameters: email, activation_token"
     cy.request({
       method: "GET",
-      url: "http://localhost:5000/auth/activation",
+      url: "https://localhost:5000/auth/activation",
       failOnStatusCode: false,
       qs: {
         activation_token: "123456",
@@ -129,7 +129,7 @@ describe("Activate account", () => {
       "Missing parameters. Passed parameters: email. Required parameters: email, activation_token"
     cy.request({
       method: "GET",
-      url: "http://localhost:5000/auth/activation",
+      url: "https://localhost:5000/auth/activation",
       failOnStatusCode: false,
       qs: {
         email: "ncarm89@gmail.com",
@@ -144,7 +144,7 @@ describe("Activate account", () => {
     const message = "User was activated already or it does not exists."
     cy.request({
       method: "GET",
-      url: "http://localhost:5000/auth/activation",
+      url: "https://localhost:5000/auth/activation",
       failOnStatusCode: false,
       qs: {
         email: "ncarm89@gmail.com",
@@ -160,7 +160,7 @@ describe("Activate account", () => {
     const message = "User was activated already or it does not exists."
     cy.request({
       method: "GET",
-      url: "http://localhost:5000/auth/activation",
+      url: "https://localhost:5000/auth/activation",
       failOnStatusCode: false,
       qs: {
         email: "noelcarmona@gmail.com",
@@ -177,7 +177,7 @@ describe("Activate account", () => {
       "Account assigned with email ncarm89@gmail.com has been activated successfully."
     cy.request({
       method: "GET",
-      url: "http://localhost:5000/auth/activation",
+      url: "https://localhost:5000/auth/activation",
       failOnStatusCode: false,
       qs: {
         email: "ncarm89@gmail.com",
@@ -193,7 +193,7 @@ describe("Activate account", () => {
     const message = "User was activated already or it does not exists."
     cy.request({
       method: "GET",
-      url: "http://localhost:5000/auth/activation",
+      url: "https://localhost:5000/auth/activation",
       failOnStatusCode: false,
       qs: {
         email: "ncarm89@gmail.com",
