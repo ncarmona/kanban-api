@@ -5,6 +5,7 @@ import { IRoute } from "@core/routes/IRoute"
 import { AuthController } from "@controllers/authController"
 import { requiredParameters, RequestObject } from "@core/middlewares"
 import { allowAll } from "@core/cors"
+import { generateAuthCookie } from "@core/cookies"
 import cors from "cors"
 
 export class AuthRoutes implements IRoute {
@@ -73,6 +74,8 @@ export class AuthRoutes implements IRoute {
         password,
       }
       const response: IResponse = await authController.signin(auth)
+      if (response.status_code === 200)
+        generateAuthCookie(res, response.data as IAuth)
       res.status(response.status_code).send(response)
     })
   }
