@@ -21,3 +21,14 @@ export function requiredParameters(
     validParam ? next() : res.status(response.status_code).send(response)
   }
 }
+
+
+export function guestUser() {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const { auth } = req.cookies
+    const response: IResponse = mustBeGuest()
+    auth === undefined
+      ? next()
+      : res.status(response.status_code).send(response)
+  }
+}
