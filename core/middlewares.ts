@@ -1,6 +1,8 @@
 import { Response, Request, NextFunction } from "express"
 import { IResponse } from "./routes/IResponse"
 import { missingParameters } from "./responses/responses"
+import { mustBeGuest, userMustBeRegistered } from "@responses/authResponses"
+
 export enum RequestObject {
   QUERY = "query",
   BODY = "body",
@@ -22,6 +24,15 @@ export function requiredParameters(
   }
 }
 
+export function registeredUser() {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const { auth } = req.cookies
+    const response: IResponse = userMustBeRegistered()
+    auth !== undefined
+      ? next()
+      : res.status(response.status_code).send(response)
+  }
+}
 
 export function guestUser() {
   return (req: Request, res: Response, next: NextFunction) => {
