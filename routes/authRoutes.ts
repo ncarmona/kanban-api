@@ -3,7 +3,7 @@ import { Application, Response, Request } from "express"
 import { IResponse } from "@core/routes/IResponse"
 import { IRoute } from "@core/routes/IRoute"
 import { AuthController } from "@controllers/authController"
-import { requiredParameters, RequestObject } from "@core/middlewares"
+import { requiredParameters, RequestObject, guestUser } from "@core/middlewares"
 import { allowAll } from "@core/cors"
 import { generateAuthCookie } from "@core/cookies"
 import cors from "cors"
@@ -31,6 +31,7 @@ export class AuthRoutes implements IRoute {
     const middlewares = [
       requiredParameters(["email", "password"], RequestObject.BODY),
       cors(allowAll),
+      guestUser(),
     ]
 
     this.core.post(route, middlewares, async (req: Request, res: Response) => {
@@ -50,6 +51,7 @@ export class AuthRoutes implements IRoute {
     const middlewares = [
       requiredParameters(["email", "activation_token"], RequestObject.QUERY),
       cors(allowAll),
+      guestUser(),
     ]
     this.core.get(route, middlewares, async (req: Request, res: Response) => {
       const auth: IAuth = {
@@ -66,6 +68,7 @@ export class AuthRoutes implements IRoute {
     const middlewares = [
       requiredParameters(["email", "password"], RequestObject.BODY),
       cors(allowAll),
+      guestUser(),
     ]
     this.core.get(route, middlewares, async (req: Request, res: Response) => {
       const { email, password } = req.body
