@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 require("module-alias/register")
 require("@core/environment")
 
@@ -11,6 +12,7 @@ import fs from "fs"
 import path from "path"
 import morgan from "morgan"
 import cookiesParser from "cookie-parser"
+import https from "https"
 
 const app: Application = express()
 
@@ -29,7 +31,15 @@ const port = 5000
 let connector: IConnector
 
 router(app)
-app.listen(port, async () => {
+https
+  .createServer(
+    {
+      key: fs.readFileSync("keys/https/key.pem"),
+      cert: fs.readFileSync("keys/https/cert.pem"),
+    },
+    app
+  )
+  .listen(port, async () => {
   connector = new MongoDBConnector()
   try {
     await connector.link()
