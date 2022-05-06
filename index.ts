@@ -10,9 +10,11 @@ import helmet from "helmet"
 import fs from "fs"
 import path from "path"
 import morgan from "morgan"
+import cookiesParser from "cookie-parser"
 
 const app: Application = express()
 
+app.use(cookiesParser())
 app.use(bodyParser.json())
 app.use(helmet())
 app.use(
