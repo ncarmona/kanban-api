@@ -39,7 +39,7 @@ npm run dev
 ````
 
 By default server will be accesible trough this url:
-___http://localhost:5000___
+___https://localhost:5000___
 
 ### Build the project and upload it to production server
 Build mode will generate all .js files. To do that run this command the root folder of the project:
