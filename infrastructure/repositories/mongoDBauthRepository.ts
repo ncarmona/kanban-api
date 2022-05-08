@@ -68,4 +68,15 @@ export class MongoDBAuthRepository implements AuthRepository {
         .catch((e: MongooseError) => reject(e))
     })
   }
+
+  async removePermanently(id: string): Promise<UserModel> {
+    return new Promise((resolve, reject) => {
+      mongoDBUser
+        .findByIdAndDelete(id)
+        .then((u: IUser) => {
+          u === null ? reject(null) : resolve(new UserModel(u))
+        })
+        .catch((e: MongooseError) => reject(e))
+    })
+  }
 }

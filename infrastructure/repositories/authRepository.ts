@@ -5,4 +5,5 @@ export interface AuthRepository {
   signup(auth: IAuth): Promise<UserModel>
   userActivation(auth: IAuth): Promise<UserModel>
   signin(auth: IAuth): Promise<UserModel>
+  removePermanently(id: string): Promise<UserModel>
 }
