@@ -2,7 +2,8 @@ import {
   signupSuccessful,
   invalidSignupEmail,
   emailAlreadyExists,
-  userAlreadyActivated
+  userAlreadyActivated,
+  userDisabled,
 } from "./authResponses"
 import { IUser } from "../domain/interfaces/IUser"
 import { IResponse } from "../core/routes/IResponse"
@@ -83,6 +84,24 @@ describe("Auth responses. userAlreadyActivated", () => {
     expect(response.message).toStrictEqual(message)
   })
 
+  it("Status field must be 404", () => {
+    expect(response.status_code).toBe(status_code)
+  })
+})
+describe("User disabled", () => {
+  const email = "ncarm89@gmail.com"
+  const message =
+    "User with email " +
+    email +
+    " has been disabled. Contact with administration for further information."
+  const status_code = 404
+  let response: IResponse
+
+  beforeAll(() => (response = userDisabled(email)))
+
+  it("Message must test must contain the email", () => {
+    expect(response.message).toStrictEqual(message)
+  })
   it("Status field must be 404", () => {
     expect(response.status_code).toBe(status_code)
   })
