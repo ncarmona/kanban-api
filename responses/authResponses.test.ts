@@ -141,3 +141,18 @@ describe("User does not exists", () => {
     expect(response.status_code).toBe(status_code)
   })
 })
+
+describe("User does not exists", () => {
+  const message = "User does not exists."
+  const status_code = 404
+  let response: IResponse
+
+  beforeAll(() => (response = userDoesNotExists()))
+
+  it("Message must test must contain the email", () => {
+    expect(response.message).toStrictEqual(message)
+  })
+  it("Status field must be 404", () => {
+    expect(response.status_code).toBe(status_code)
+  })
+})
