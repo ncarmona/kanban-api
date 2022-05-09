@@ -1,4 +1,4 @@
-import {} from "cypress"
+import cypress, {} from "cypress"
 import { IResponse } from "../../core/routes/IResponse"
 import {
   userDoesNotExists,
@@ -211,6 +211,9 @@ describe("Activate account", () => {
   })
 })
 describe("Signin user", () => {
+  beforeEach(() => {
+    Cypress.Cookies.preserveOnce("auth")
+  })
   it("Invalid parameters must display error.", () => {
     const message =
       "Missing parameters. Passed parameters: email, activation_token. Required parameters: email, password"
