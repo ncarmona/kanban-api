@@ -68,3 +68,18 @@ describe("User must be registered", () => {
     expect(response.status_code).toBe(status_code)
   })
 })
+
+describe("User must be registered", () => {
+  const message = "Registered users can not perform this action."
+  const status_code = 401
+  let response: IResponse
+
+  beforeAll(() => (response = mustBeGuest()))
+
+  it("Message must test must contain the email", () => {
+    expect(response.message).toStrictEqual(message)
+  })
+  it("Status field must be 404", () => {
+    expect(response.status_code).toBe(status_code)
+  })
+})
