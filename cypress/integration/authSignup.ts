@@ -240,4 +240,20 @@ describe("Signin user", () => {
       expect(response.body.message).to.eq(message)
     })
   })
+  it("Missing parameter password.", () => {
+    const message =
+      "Missing parameters. Passed parameters: email. Required parameters: email, password"
+    cy.request({
+      method: "GET",
+      url: "https://localhost:5000/auth/signin",
+      failOnStatusCode: false,
+      body: {
+        email: "ncarm89@gmail.com",
+      },
+    }).then((response: Cypress.Response<IResponse>) => {
+      expect(response.status).to.eq(500)
+      expect(response.body.status_code).to.eq(500)
+      expect(response.body.message).to.eq(message)
+    })
+  })
 })
