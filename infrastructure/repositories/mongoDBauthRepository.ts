@@ -62,6 +62,7 @@ export class MongoDBAuthRepository implements AuthRepository {
       const filter: FilterQuery<IUser> = user
       mongoDBUser
         .findOne(filter)
+        .select(["-password", "-_id", "-activation_token"])
         .then((u: IUser) =>
           u === null ? reject(null) : resolve(new UserModel(u))
         )
