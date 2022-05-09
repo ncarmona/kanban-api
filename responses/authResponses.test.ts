@@ -4,18 +4,18 @@ import {
   emailAlreadyExists,
   userAlreadyActivated,
   userDisabled,
+  userSigninSuccessfully,
 } from "./authResponses"
 import { IUser } from "../domain/interfaces/IUser"
 import { IResponse } from "../core/routes/IResponse"
-
+const userData: IUser = {
+  created_at: new Date(),
+  modified_at: new Date(),
+  deleted: false,
+  disabled: true,
+  email: "mail@fake.com",
+}
 describe("Auth responses. SignupSuccessful", () => {
-  const userData: IUser = {
-    created_at: new Date(),
-    modified_at: new Date(),
-    deleted: false,
-    disabled: true,
-    email: "mail@fake.com",
-  }
   const status_code = 200
   const createdOK = "User created successfully"
   let response: IResponse
@@ -88,6 +88,7 @@ describe("Auth responses. userAlreadyActivated", () => {
     expect(response.status_code).toBe(status_code)
   })
 })
+
 describe("User disabled", () => {
   const email = "ncarm89@gmail.com"
   const message =
@@ -103,6 +104,21 @@ describe("User disabled", () => {
     expect(response.message).toStrictEqual(message)
   })
   it("Status field must be 404", () => {
+    expect(response.status_code).toBe(status_code)
+  })
+})
+
+describe("User signin successfully", () => {
+  const message = "User signin successfully."
+  const status_code = 200
+  let response: IResponse
+
+  beforeAll(() => (response = userSigninSuccessfully(userData)))
+
+  it("Message must test must contain the email", () => {
+    expect(response.message).toStrictEqual(message)
+  })
+  it("Status field must be 200", () => {
     expect(response.status_code).toBe(status_code)
   })
 })
