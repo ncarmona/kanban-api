@@ -1,5 +1,6 @@
 import {} from "cypress"
 import { IResponse } from "../../core/routes/IResponse"
+import { userDoesNotExists } from "../../responses/authResponses"
 
 describe("AuthSignup", () => {
   it("invalid parameters must display error", () => {
@@ -254,6 +255,23 @@ describe("Signin user", () => {
       expect(response.status).to.eq(500)
       expect(response.body.status_code).to.eq(500)
       expect(response.body.message).to.eq(message)
+    })
+  })
+  it("User does not exists.", () => {
+    const expectedResponse: IResponse = userDoesNotExists()
+    expectedResponse.message
+    cy.request({
+      method: "GET",
+      url: "https://localhost:5000/auth/signin",
+      failOnStatusCode: false,
+      body: {
+        email: "ncarm89@gmail.com",
+        password: "idk",
+      },
+    }).then((response: Cypress.Response<IResponse>) => {
+      expect(response.status).to.eq(404)
+      expect(response.body.status_code).to.eq(404)
+      expect(response.body.message).to.eq(expectedResponse.message)
     })
   })
 })
