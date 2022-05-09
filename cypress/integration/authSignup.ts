@@ -304,6 +304,7 @@ describe("Signin user", () => {
       expect(response.body.data).to.haveOwnProperty("modified_at")
       expect(response.body.data).to.not.haveOwnProperty("password")
       expect(response.body.data).to.not.haveOwnProperty("_id")
+      expect(cy.getCookie("auth")).to.not.null
       expect(response.body.data).to.haveOwnProperty(
         "email",
         "ncarm89@gmail.com"
