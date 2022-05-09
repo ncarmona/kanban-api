@@ -206,3 +206,22 @@ describe("Activate account", () => {
     })
   })
 })
+describe("Signin user", () => {
+  it("Invalid parameters must display error.", () => {
+    const message =
+      "Missing parameters. Passed parameters: email, activation_token. Required parameters: email, password"
+    cy.request({
+      method: "GET",
+      url: "https://localhost:5000/auth/signin",
+      failOnStatusCode: false,
+      body: {
+        email: "ncarm89@gmail.com",
+        activation_token: "123456",
+      },
+    }).then((response: Cypress.Response<IResponse>) => {
+      expect(response.status).to.eq(500)
+      expect(response.body.status_code).to.eq(500)
+      expect(response.body.message).to.eq(message)
+    })
+  })
+})
