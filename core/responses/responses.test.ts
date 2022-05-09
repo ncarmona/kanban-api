@@ -1,5 +1,10 @@
 import { IResponse } from "../routes/IResponse"
-import { missingParameters, unexpectedError } from "./responses"
+import {
+  missingParameters,
+  unexpectedError,
+  mustBeGuest,
+  userMustBeRegistered,
+} from "./responses"
 
 describe("Response missing parameters", () => {
   const passedParams: string[] = ["param1", "param3"]
@@ -46,5 +51,20 @@ describe("Response unexpected error", () => {
 
   it("Message field must be 'unexpected error, chck logs for more details", () => {
     expect(response.message).toStrictEqual(message)
+  })
+})
+
+describe("User must be registered", () => {
+  const message = "Guest can not perform this action."
+  const status_code = 401
+  let response: IResponse
+
+  beforeAll(() => (response = userMustBeRegistered()))
+
+  it("Message must test must contain the email", () => {
+    expect(response.message).toStrictEqual(message)
+  })
+  it("Status field must be 404", () => {
+    expect(response.status_code).toBe(status_code)
   })
 })
