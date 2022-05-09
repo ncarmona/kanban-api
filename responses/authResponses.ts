@@ -70,18 +70,3 @@ export function userDoesNotExists(): IResponse {
     status_code: 404,
   }
 }
-export function userMustBeRegistered(): IResponse {
-  return {
-    data: {},
-    message: "Guest can not perform this action.",
-    status_code: 401,
-  }
-}
-
-export function mustBeGuest(): IResponse {
-  return {
-    data: {},
-    message: "Registered users can not perform this action.",
-    status_code: 401,
-  }
-}

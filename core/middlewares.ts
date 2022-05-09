@@ -1,7 +1,10 @@
 import { Response, Request, NextFunction } from "express"
 import { IResponse } from "./routes/IResponse"
-import { missingParameters } from "./responses/responses"
-import { mustBeGuest, userMustBeRegistered } from "@responses/authResponses"
+import {
+  mustBeGuest,
+  userMustBeRegistered,
+  missingParameters,
+} from "./responses/responses"
 
 export enum RequestObject {
   QUERY = "query",
