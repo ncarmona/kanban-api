@@ -121,4 +121,7 @@ describe("User signin successfully", () => {
   it("Status field must be 200", () => {
     expect(response.status_code).toBe(status_code)
   })
+  it("User data must be the same as pased by parameter.", () => {
+    expect(response.data).toStrictEqual(userData)
+  })
 })
