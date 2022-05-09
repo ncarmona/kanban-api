@@ -60,7 +60,7 @@ export class AuthController {
 
       delete userObject.password
       delete userObject.activation_token
-
+      delete userObject._id
       response = signupSuccessful(userObject)
     } catch (error) {
       if (error === "Email already exists.") response = emailAlreadyExists()
