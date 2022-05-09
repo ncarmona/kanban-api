@@ -1,6 +1,9 @@
 import {} from "cypress"
 import { IResponse } from "../../core/routes/IResponse"
-import { userDoesNotExists } from "../../responses/authResponses"
+import {
+  userDoesNotExists,
+  userSigninSuccessfully,
+} from "../../responses/authResponses"
 
 describe("AuthSignup", () => {
   it("invalid parameters must display error", () => {
@@ -272,6 +275,39 @@ describe("Signin user", () => {
       expect(response.status).to.eq(404)
       expect(response.body.status_code).to.eq(404)
       expect(response.body.message).to.eq(expectedResponse.message)
+    })
+  })
+  //TODO: Do tests when disable, delete
+  it.skip("User deleted")
+  it.skip("User deleted permanently")
+  it.skip("User disabled")
+  it.skip("Logged user attempts to signin again")
+  it.skip("Logged user attempts to signup")
+  it.skip("Not activated user can not signin")
+  it("User login successfully", () => {
+    const expectedResponse: IResponse = userSigninSuccessfully({})
+    cy.request({
+      method: "GET",
+      url: "https://localhost:5000/auth/signin",
+      failOnStatusCode: false,
+      body: {
+        email: "ncarm89@gmail.com",
+        password: "12344",
+      },
+    }).then((response: Cypress.Response<IResponse>) => {
+      expect(response.status).to.eq(200)
+      expect(response.body.status_code).to.eq(200)
+      expect(response.body.message).to.eq(expectedResponse.message)
+      expect(response.body.data).to.haveOwnProperty("created_at")
+      expect(response.body.data).to.haveOwnProperty("deleted", false)
+      expect(response.body.data).to.haveOwnProperty("disabled", false)
+      expect(response.body.data).to.haveOwnProperty("modified_at")
+      expect(response.body.data).to.not.haveOwnProperty("password")
+      expect(response.body.data).to.not.haveOwnProperty("_id")
+      expect(response.body.data).to.haveOwnProperty(
+        "email",
+        "ncarm89@gmail.com"
+      )
     })
   })
 })
