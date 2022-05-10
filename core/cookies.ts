@@ -1,7 +1,7 @@
-import { IAuth } from "./models/IAuth"
 import { generateAuthToken } from "./auth"
 import { CookieOptions, Response } from "express"
-export function generateAuthCookie(res: Response, auth: IAuth): void {
+import { IUser } from "@interfaces/IUser"
+export function generateAuthCookie(res: Response, user: IUser): void {
   const expires = new Date()
   expires.setTime(new Date().getTime() + 3600000 * 24 * 14)
 
@@ -11,5 +11,5 @@ export function generateAuthCookie(res: Response, auth: IAuth): void {
     secure: true,
     expires,
   }
-  res.cookie("auth", generateAuthToken(auth), options)
+  res.cookie("auth", generateAuthToken(user), options)
 }
