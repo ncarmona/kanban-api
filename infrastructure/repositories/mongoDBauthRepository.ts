@@ -94,4 +94,17 @@ export class MongoDBAuthRepository implements AuthRepository {
         .catch((e: MongooseError) => reject(e))
     })
   }
+  async delete(id: string): Promise<UserModel> {
+    return new Promise((resolve, reject) => {
+      const filter: FilterQuery<unknown> = { _id: id, deleted: false }
+      const modified_at: Date = new Date()
+      const update: UpdateQuery<unknown> = { deleted: true, modified_at }
+      mongoDBUser
+        .findOneAndUpdate(filter, update, { new: true })
+        .then((u: IUser) => {
+          u === null ? reject(null) : resolve(new UserModel(u))
+        })
+        .catch((e: MongooseError) => reject(e))
+    })
+  }
 }

@@ -31,6 +31,7 @@ export class AuthRoutes implements IRoute {
     this.signin("/signin")
     this.disable("/disable")
     this.enable("/enable")
+    this.delete("/delete")
   }
 
   private createRoute(action: string) {
@@ -111,5 +112,20 @@ export class AuthRoutes implements IRoute {
       const response: IResponse = await authController.enable(_id)
       res.status(response.status_code).send(response)
     })
+  }
+  private delete(action: string) {
+    const authController = new AuthController()
+    const route = this.base_route + action
+    const middlewares = [cors(allowAll), registeredUser()]
+
+    this.core.delete(
+      route,
+      middlewares,
+      async (req: Request, res: Response) => {
+        const { _id } = res.locals.user as IUser
+        const response: IResponse = await authController.delete(_id)
+        res.status(response.status_code).send(response)
+      }
+    )
   }
 }

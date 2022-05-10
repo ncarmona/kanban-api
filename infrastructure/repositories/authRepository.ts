@@ -7,4 +7,5 @@ export interface AuthRepository {
   signin(auth: IAuth): Promise<UserModel>
   removePermanently(id: string): Promise<UserModel>
   toggleDisable(id: string, disabled: boolean): Promise<UserModel>
+  delete(id: string): Promise<UserModel>
 }

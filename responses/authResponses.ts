@@ -86,3 +86,11 @@ export function userHasBeenEnabled(): IResponse {
     status_code: 200,
   }
 }
+
+export function userHasBeenDeleted(): IResponse {
+  return {
+    data: {},
+    message: "User has been deleted successfully.",
+    status_code: 200,
+  }
+}
