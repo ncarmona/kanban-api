@@ -20,4 +20,8 @@ export class AuthUseCases {
   signin(auth: IAuth): Promise<UserModel> {
     return this.database.signin(auth)
   }
+
+  disable(id: string): Promise<UserModel> {
+    return this.database.disable(id)
+  }
 }
