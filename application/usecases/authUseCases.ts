@@ -22,6 +22,9 @@ export class AuthUseCases {
   }
 
   disable(id: string): Promise<UserModel> {
-    return this.database.disable(id)
+    return this.database.toggleDisable(id, true)
+  }
+  enable(id: string): Promise<UserModel> {
+    return this.database.toggleDisable(id, false)
   }
 }

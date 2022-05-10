@@ -7,6 +7,7 @@ import {
   userSigninSuccessfully,
   userDoesNotExists,
   userHasBeenDisabled,
+  userHasBeenEnabled,
 } from "./authResponses"
 import { IUser } from "../domain/interfaces/IUser"
 import { IResponse } from "../core/routes/IResponse"
@@ -163,6 +164,20 @@ describe("User has been disabled", () => {
   let response: IResponse
 
   beforeAll(() => (response = userHasBeenDisabled()))
+
+  it("Message must be the same as message variable", () => {
+    expect(response.message).toStrictEqual(message)
+  })
+  it("Status field must be 200", () => {
+    expect(response.status_code).toBe(status_code)
+  })
+})
+describe("User has been enabled", () => {
+  const message = "User has been enabled successfully."
+  const status_code = 200
+  let response: IResponse
+
+  beforeAll(() => (response = userHasBeenEnabled()))
 
   it("Message must be the same as message variable", () => {
     expect(response.message).toStrictEqual(message)

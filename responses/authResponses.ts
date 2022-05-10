@@ -78,3 +78,11 @@ export function userHasBeenDisabled(): IResponse {
     status_code: 200,
   }
 }
+
+export function userHasBeenEnabled(): IResponse {
+  return {
+    data: {},
+    message: "User has been enabled successfully.",
+    status_code: 200,
+  }
+}

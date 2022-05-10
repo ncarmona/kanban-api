@@ -9,6 +9,7 @@ import {
   userSigninSuccessfully,
   userDoesNotExists,
   userHasBeenDisabled,
+  userHasBeenEnabled,
 } from "@responses/authResponses"
 import { unexpectedError } from "@core/responses/responses"
 import { MongoDBAuthRepository } from "@repositories/mongoDBauthRepository"
@@ -102,6 +103,18 @@ export class AuthController {
     try {
       const user: UserModel = await this.authUseCases.disable(id)
       response = user.getDisabled() ? userHasBeenDisabled() : unexpectedError()
+    } catch (error) {
+      response = error === null ? userDoesNotExists() : unexpectedError()
+    }
+
+    return response
+  }
+  async enable(id: string): Promise<IResponse> {
+    let response: IResponse
+
+    try {
+      const user: UserModel = await this.authUseCases.enable(id)
+      response = !user.getDisabled() ? userHasBeenEnabled() : unexpectedError()
     } catch (error) {
       response = error === null ? userDoesNotExists() : unexpectedError()
     }

@@ -6,7 +6,7 @@ import { IAuth } from "@core/models/IAuth"
 import { mongoDBUser } from "@core/repository/MongoDB/Schemas/User"
 import { MongooseError } from "mongoose"
 import { AuthRepository } from "@repositories/authRepository"
-import { FilterQuery } from "mongoose"
+import { FilterQuery, UpdateQuery } from "mongoose"
 export class MongoDBAuthRepository implements AuthRepository {
   private readonly connector: IConnector
 
@@ -81,14 +81,13 @@ export class MongoDBAuthRepository implements AuthRepository {
     })
   }
 
-  async disable(id: string): Promise<UserModel> {
+  async toggleDisable(id: string, disabled: boolean): Promise<UserModel> {
     return new Promise((resolve, reject) => {
+      const filter: FilterQuery<unknown> = { _id: id, deleted: false }
+      const modified_at: Date = new Date()
+      const update: UpdateQuery<unknown> = { disabled, modified_at }
       mongoDBUser
-        .findOneAndUpdate(
-          { _id: id, deleted: false },
-          { disabled: true },
-          { new: true }
-        )
+        .findOneAndUpdate(filter, update, { new: true })
         .then((u: IUser) => {
           u === null ? reject(null) : resolve(new UserModel(u))
         })
