@@ -90,6 +90,9 @@ export class AuthRoutes implements IRoute {
       const response: IResponse = await authController.signin(auth)
       if (response.status_code === 200)
         generateAuthCookie(res, response.data as IUser)
+      const userData = response.data as IUser
+      delete userData._id
+      response.data = userData
       res.status(response.status_code).send(response)
     })
   }
