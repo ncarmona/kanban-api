@@ -62,7 +62,7 @@ export class MongoDBAuthRepository implements AuthRepository {
       const filter: FilterQuery<IUser> = user
       mongoDBUser
         .findOne(filter)
-        .select(["-password", "-_id", "-activation_token"])
+        .select(["-password", "-activation_token"])
         .then((u: IUser) =>
           u === null ? reject(null) : resolve(new UserModel(u))
         )
@@ -74,6 +74,21 @@ export class MongoDBAuthRepository implements AuthRepository {
     return new Promise((resolve, reject) => {
       mongoDBUser
         .findByIdAndDelete(id)
+        .then((u: IUser) => {
+          u === null ? reject(null) : resolve(new UserModel(u))
+        })
+        .catch((e: MongooseError) => reject(e))
+    })
+  }
+
+  async disable(id: string): Promise<UserModel> {
+    return new Promise((resolve, reject) => {
+      mongoDBUser
+        .findOneAndUpdate(
+          { _id: id, deleted: false },
+          { disabled: true },
+          { new: true }
+        )
         .then((u: IUser) => {
           u === null ? reject(null) : resolve(new UserModel(u))
         })

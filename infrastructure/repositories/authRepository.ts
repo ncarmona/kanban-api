@@ -6,4 +6,5 @@ export interface AuthRepository {
   userActivation(auth: IAuth): Promise<UserModel>
   signin(auth: IAuth): Promise<UserModel>
   removePermanently(id: string): Promise<UserModel>
+  disable(id: string): Promise<UserModel>
 }
