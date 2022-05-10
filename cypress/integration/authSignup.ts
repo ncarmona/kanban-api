@@ -1,4 +1,4 @@
-import cypress, {} from "cypress"
+import {} from "cypress"
 import { IResponse } from "../../core/routes/IResponse"
 import {
   userDoesNotExists,
@@ -64,7 +64,6 @@ describe("AuthSignup", () => {
       expect(response.status).to.eq(200)
       expect(response.body.status_code).to.eq(200)
 
-      expect(response.body.data).to.haveOwnProperty("_id")
       expect(response.body.data).to.haveOwnProperty("modified_at")
       expect(response.body.data).to.haveOwnProperty("created_at")
       expect(response.body.data).to.haveOwnProperty(
@@ -281,7 +280,6 @@ describe("Signin user", () => {
     })
   })
   //TODO: Do tests when disable, delete
-  it.skip("User deleted")
   it.skip("User deleted permanently")
   it.skip("User disabled")
   it.skip("Logged user attempts to signin again")
