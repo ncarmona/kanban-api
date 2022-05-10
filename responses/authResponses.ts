@@ -70,3 +70,11 @@ export function userDoesNotExists(): IResponse {
     status_code: 404,
   }
 }
+
+export function userHasBeenDisabled(): IResponse {
+  return {
+    data: {},
+    message: "User has been disabled successfully.",
+    status_code: 200,
+  }
+}
