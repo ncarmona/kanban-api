@@ -5,6 +5,7 @@ import {
   userMustBeRegistered,
   missingParameters,
 } from "./responses/responses"
+import { decodeAuthToken } from "./auth"
 
 export enum RequestObject {
   QUERY = "query",
@@ -31,9 +32,10 @@ export function registeredUser() {
   return (req: Request, res: Response, next: NextFunction) => {
     const { auth } = req.cookies
     const response: IResponse = userMustBeRegistered()
-    auth !== undefined
-      ? next()
-      : res.status(response.status_code).send(response)
+    if (auth !== undefined) {
+      res.locals.user = decodeAuthToken(req.cookies.auth)
+      next()
+    } else res.status(response.status_code).send(response)
   }
 }
 
