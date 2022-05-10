@@ -9,6 +9,7 @@ import {
   userHasBeenDisabled,
   userHasBeenEnabled,
   userHasBeenDeleted,
+  signoutSuccessful,
 } from "./authResponses"
 import { IUser } from "../domain/interfaces/IUser"
 import { IResponse } from "../core/routes/IResponse"
@@ -193,6 +194,20 @@ describe("User has been deleted", () => {
   let response: IResponse
 
   beforeAll(() => (response = userHasBeenDeleted()))
+
+  it("Message must be the same as message variable", () => {
+    expect(response.message).toStrictEqual(message)
+  })
+  it("Status field must be 200", () => {
+    expect(response.status_code).toBe(status_code)
+  })
+})
+describe("User signout", () => {
+  const message = "User signout successfully."
+  const status_code = 200
+  let response: IResponse
+
+  beforeAll(() => (response = signoutSuccessful()))
 
   it("Message must be the same as message variable", () => {
     expect(response.message).toStrictEqual(message)

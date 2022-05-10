@@ -3,6 +3,7 @@ import { Application, Response, Request } from "express"
 import { IResponse } from "@core/routes/IResponse"
 import { IRoute } from "@core/routes/IRoute"
 import { AuthController } from "@controllers/authController"
+import { signoutSuccessful } from "@responses/authResponses"
 import {
   requiredParameters,
   RequestObject,
@@ -32,6 +33,7 @@ export class AuthRoutes implements IRoute {
     this.disable("/disable")
     this.enable("/enable")
     this.delete("/delete")
+    this.signout("/signout")
   }
 
   private createRoute(action: string) {
@@ -127,5 +129,14 @@ export class AuthRoutes implements IRoute {
         res.status(response.status_code).send(response)
       }
     )
+  }
+  private signout(action: string) {
+    const route = this.base_route + action
+    const middlewares = [cors(allowAll), registeredUser()]
+
+    this.core.post(route, middlewares, async (_req: Request, res: Response) => {
+      res.clearCookie("auth")
+      res.status(200).send(signoutSuccessful())
+    })
   }
 }

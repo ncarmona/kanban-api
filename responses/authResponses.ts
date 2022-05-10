@@ -94,3 +94,10 @@ export function userHasBeenDeleted(): IResponse {
     status_code: 200,
   }
 }
+export function signoutSuccessful(): IResponse {
+  return {
+    data: {},
+    message: "User signout successfully.",
+    status_code: 200,
+  }
+}
