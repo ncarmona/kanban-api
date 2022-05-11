@@ -117,9 +117,7 @@ export class AuthController {
 
     try {
       const user: UserModel = await this.authUseCases.enable(id)
-      response = !user.getDisabled()
-        ? userHasBeenUpdated(user.getModel())
-        : unexpectedError()
+      response = !user.getDisabled() ? userHasBeenEnabled() : unexpectedError()
     } catch (error) {
       response = error === null ? userDoesNotExists() : unexpectedError()
     }

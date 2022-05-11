@@ -1,5 +1,5 @@
 import { IAuth } from "@core/models/IAuth"
-import { IUser } from '@interfaces/IUser'
+import { IUser } from "@interfaces/IUser"
 import { UserModel } from "@models/userModel/user.model"
 import { AuthRepository } from "@repositories/authRepository"
 
