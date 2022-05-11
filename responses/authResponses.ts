@@ -101,3 +101,11 @@ export function signoutSuccessful(): IResponse {
     status_code: 200,
   }
 }
+
+export function userHasBeenUpdated(data: IUser): IResponse {
+  return {
+    data,
+    message: "User has been updated successfully.",
+    status_code: 200,
+  }
+}

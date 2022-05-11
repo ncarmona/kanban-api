@@ -10,6 +10,7 @@ import {
   userHasBeenEnabled,
   userHasBeenDeleted,
   signoutSuccessful,
+  userHasBeenUpdated,
 } from "./authResponses"
 import { IUser } from "../domain/interfaces/IUser"
 import { IResponse } from "../core/routes/IResponse"
@@ -214,5 +215,22 @@ describe("User signout", () => {
   })
   it("Status field must be 200", () => {
     expect(response.status_code).toBe(status_code)
+  })
+})
+describe("User updated", () => {
+  const message = "User has been updated successfully."
+  const status_code = 200
+  let response: IResponse
+
+  beforeAll(() => (response = userHasBeenUpdated(userData)))
+
+  it("Message must be the same as message variable", () => {
+    expect(response.message).toStrictEqual(message)
+  })
+  it("Status field must be 200", () => {
+    expect(response.status_code).toBe(status_code)
+  })
+  it("Data must be the same as passed by parameter", () => {
+    expect(userData).toStrictEqual(response.data)
   })
 })

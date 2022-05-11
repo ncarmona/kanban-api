@@ -9,10 +9,17 @@ import { AuthRepository } from "@repositories/authRepository"
 import { FilterQuery, UpdateQuery } from "mongoose"
 export class MongoDBAuthRepository implements AuthRepository {
   private readonly connector: IConnector
-
+  private readonly hiddenFields: string[]
   constructor() {
     this.connector = new MongoDBConnector()
     this.connector.link()
+    this.hiddenFields = [
+      "-_id",
+      "-password",
+      "-deleted",
+      "-activation_token",
+      "-disabled",
+    ]
   }
 
   async signup(auth: IAuth): Promise<UserModel> {
@@ -62,7 +69,7 @@ export class MongoDBAuthRepository implements AuthRepository {
       const filter: FilterQuery<IUser> = user
       mongoDBUser
         .findOne(filter)
-        .select(["-password", "-activation_token"])
+        .select(this.hiddenFields)
         .then((u: IUser) =>
           u === null ? reject(null) : resolve(new UserModel(u))
         )
@@ -101,6 +108,23 @@ export class MongoDBAuthRepository implements AuthRepository {
       const update: UpdateQuery<unknown> = { deleted: true, modified_at }
       mongoDBUser
         .findOneAndUpdate(filter, update, { new: true })
+        .then((u: IUser) => {
+          u === null ? reject(null) : resolve(new UserModel(u))
+        })
+        .catch((e: MongooseError) => reject(e))
+    })
+  }
+  async update(user: IUser): Promise<UserModel> {
+    return new Promise((resolve, reject) => {
+      const { _id, photo, name } = user
+      const deleted = false
+      const filter: FilterQuery<unknown> = { _id, deleted }
+      const modified_at: Date = new Date()
+      const update: UpdateQuery<unknown> = { name, photo, modified_at }
+
+      mongoDBUser
+        .findOneAndUpdate(filter, update, { new: true })
+        .select(this.hiddenFields)
         .then((u: IUser) => {
           u === null ? reject(null) : resolve(new UserModel(u))
         })
