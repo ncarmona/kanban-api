@@ -8,11 +8,8 @@ import {
   userDisabled,
   userSigninSuccessfully,
   userDoesNotExists,
-  userHasBeenDisabled,
-  userHasBeenEnabled,
-  userHasBeenDeleted,
-  userHasBeenUpdated,
 } from "@responses/authResponses"
+
 import { unexpectedError } from "@core/responses/responses"
 import { MongoDBAuthRepository } from "@repositories/mongoDBauthRepository"
 import { AuthRepository } from "@repositories/authRepository"
@@ -97,59 +94,6 @@ export class AuthController {
       console.log(error)
       if (error === null) response = userDoesNotExists()
     }
-    return response
-  }
-  async disable(id: string): Promise<IResponse> {
-    let response: IResponse
-
-    try {
-      const user: UserModel = await this.authUseCases.disable(id)
-      response = user.getDisabled() ? userHasBeenDisabled() : unexpectedError()
-    } catch (error) {
-      response = error === null ? userDoesNotExists() : unexpectedError()
-    }
-
-    return response
-  }
-
-  async enable(id: string): Promise<IResponse> {
-    let response: IResponse
-
-    try {
-      const user: UserModel = await this.authUseCases.enable(id)
-      response = !user.getDisabled() ? userHasBeenEnabled() : unexpectedError()
-    } catch (error) {
-      response = error === null ? userDoesNotExists() : unexpectedError()
-    }
-
-    return response
-  }
-
-  async delete(id: string): Promise<IResponse> {
-    let response: IResponse
-
-    try {
-      const user: UserModel = await this.authUseCases.delete(id)
-      response = !user.getDisabled() ? userHasBeenDeleted() : unexpectedError()
-    } catch (error) {
-      response = error === null ? userDoesNotExists() : unexpectedError()
-    }
-
-    return response
-  }
-
-  async update(userData: IUser): Promise<IResponse> {
-    let response: IResponse
-
-    try {
-      const user: UserModel = await this.authUseCases.update(userData)
-      response = !user.getDisabled()
-        ? userHasBeenUpdated(user.getModel())
-        : unexpectedError()
-    } catch (error) {
-      response = error === null ? userDoesNotExists() : unexpectedError()
-    }
-
     return response
   }
 }

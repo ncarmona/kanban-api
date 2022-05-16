@@ -5,7 +5,7 @@ import {
   userSigninSuccessfully,
 } from "../../responses/authResponses"
 
-describe("AuthSignup", () => {
+describe("Signup user", () => {
   it("invalid parameters must display error", () => {
     const message =
       "Missing parameters. Passed parameters: emaile, password. Required parameters: email, password"
@@ -87,9 +87,9 @@ describe("AuthSignup", () => {
         password: "12344",
       },
     }).then((response: Cypress.Response<IResponse>) => {
-      expect(response.status).to.eq(500)
-      expect(response.body.status_code).to.eq(500)
       expect(response.body.message).to.eq(expectedMessage)
+      expect(response.body.status_code).to.eq(500)
+      expect(response.status).to.eq(500)
     })
   })
 })
@@ -203,9 +203,9 @@ describe("Activate account", () => {
         activation_token: "123456",
       },
     }).then((response: Cypress.Response<IResponse>) => {
+      expect(response.body.message).to.eq(message)
       expect(response.status).to.eq(404)
       expect(response.body.status_code).to.eq(404)
-      expect(response.body.message).to.eq(message)
     })
   })
 })

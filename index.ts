@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 require("module-alias/register")
-require("@core/environment")
 
+import { config as dotEnvConfig } from "dotenv"
+dotEnvConfig()
 import { IConnector } from "@core/repository/connectors/IConnector"
 import { MongoDBConnector } from "@core/repository/connectors/MongoDBConnector"
 import express, { Application } from "express"

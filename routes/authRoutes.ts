@@ -30,11 +30,7 @@ export class AuthRoutes implements IRoute {
     this.createRoute("/signup")
     this.activateAccount("/activation")
     this.signin("/signin")
-    this.disable("/disable")
-    this.enable("/enable")
-    this.delete("/delete")
     this.signout("/signout")
-    this.update("/update")
   }
 
   private createRoute(action: string) {
@@ -97,43 +93,6 @@ export class AuthRoutes implements IRoute {
       res.status(response.status_code).send(response)
     })
   }
-  private disable(action: string) {
-    const authController = new AuthController()
-    const route = this.base_route + action
-    const middlewares = [cors(allowAll), registeredUser()]
-
-    this.core.put(route, middlewares, async (req: Request, res: Response) => {
-      const { _id } = res.locals.user as IUser
-      const response: IResponse = await authController.disable(_id)
-      res.status(response.status_code).send(response)
-    })
-  }
-  private enable(action: string) {
-    const authController = new AuthController()
-    const route = this.base_route + action
-    const middlewares = [cors(allowAll), registeredUser()]
-
-    this.core.put(route, middlewares, async (req: Request, res: Response) => {
-      const { _id } = res.locals.user as IUser
-      const response: IResponse = await authController.enable(_id)
-      res.status(response.status_code).send(response)
-    })
-  }
-  private delete(action: string) {
-    const authController = new AuthController()
-    const route = this.base_route + action
-    const middlewares = [cors(allowAll), registeredUser()]
-
-    this.core.delete(
-      route,
-      middlewares,
-      async (req: Request, res: Response) => {
-        const { _id } = res.locals.user as IUser
-        const response: IResponse = await authController.delete(_id)
-        res.status(response.status_code).send(response)
-      }
-    )
-  }
   private signout(action: string) {
     const route = this.base_route + action
     const middlewares = [cors(allowAll), registeredUser()]
@@ -141,19 +100,6 @@ export class AuthRoutes implements IRoute {
     this.core.post(route, middlewares, async (_req: Request, res: Response) => {
       res.clearCookie("auth")
       res.status(200).send(signoutSuccessful())
-    })
-  }
-  private update(action: string) {
-    const authController = new AuthController()
-    const route = this.base_route + action
-    const middlewares = [cors(allowAll), registeredUser()]
-
-    this.core.put(route, middlewares, async (req: Request, res: Response) => {
-      const { _id } = res.locals.user as IUser
-      const userData = req.body as IUser
-      userData._id = _id
-      const response: IResponse = await authController.update(userData)
-      res.status(response.status_code).send(response)
     })
   }
 }
