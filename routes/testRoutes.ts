@@ -3,7 +3,8 @@ import { Application, Response, Request } from "express"
 import { guestUser } from "../core/middlewares"
 import cors from "cors"
 import { allowAll } from "../core/cors"
-
+import { IResponse } from "@core/routes/IResponse"
+import { TestController } from "@controllers/testController"
 export class TestRoutes implements IRoute {
   private readonly base_route: string
   private readonly core: Application
@@ -20,11 +21,12 @@ export class TestRoutes implements IRoute {
   }
 
   private dropCollection(action: string) {
+    const testController = new TestController()
     const route = this.base_route + action
     const middlewares = [cors(allowAll), guestUser()]
     this.core.put(route, middlewares, async (req: Request, res: Response) => {
-      /* const response: IResponse = await authController.signup(auth) */
-      res.status(200).send("Route works ok")
+      const response: IResponse = await testController.dropCollections()
+      res.status(200).send(response)
     })
   }
 }
