@@ -20,7 +20,7 @@ export class UserRoutes implements IRoute {
   routes(): void {
     this.disable("/disable")
     this.enable("/enable")
-    this.delete("/delete")
+    this.delete("")
     this.update("")
   }
   private update(action: string) {
