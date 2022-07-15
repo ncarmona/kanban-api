@@ -91,7 +91,6 @@ export class AuthController {
         ? userDisabled(user.getEmail())
         : userSigninSuccessfully(user.getModel())
     } catch (error) {
-      console.log(error)
       if (error === null) response = userDoesNotExists()
     }
     return response
