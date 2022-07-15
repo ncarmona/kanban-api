@@ -53,7 +53,8 @@ export class UserController {
 
     try {
       const user: UserModel = await this.userUseCases.delete(id)
-      response = !user.getDisabled() ? userHasBeenDeleted() : unexpectedError()
+      console.log(user)
+      response = user.getDeleted() ? userHasBeenDeleted() : unexpectedError()
     } catch (error) {
       response = error === null ? userDoesNotExists() : unexpectedError()
     }
