@@ -5,7 +5,10 @@ import { environmentIs, Environments } from "@utils/environment"
 const schema = new Schema({
   email: {
     type: String,
-    unique: true,
+    index: {
+      index: "text",
+      unique: true,
+    },
     required: true,
   },
   password: {
@@ -39,7 +42,6 @@ const schema = new Schema({
   name: String,
   photo: String,
 })
-
+schema.index({ email: 1 }, { unique: true })
 const mongoDBUser = model("User", schema)
-
 export { mongoDBUser }

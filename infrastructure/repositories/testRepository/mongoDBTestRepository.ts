@@ -9,9 +9,22 @@ export class MongoDBTestRepository implements TestRepository {
     this.connector = new MongoDBConnector()
     this.connector.link()
   }
-  dropCollections(): Promise<boolean> {
+  async dropCollections(): Promise<boolean> {
     const connection: Mongoose.Connection =
       this.connector.status() as Mongoose.Connection
-    return connection.db.dropDatabase()
+    const collectionNames: string[] = (await connection.db.collections()).map(
+      (c) => c.collectionName
+    )
+    let dropped = true
+
+    try {
+      collectionNames.forEach(async (collection: string) => {
+        await connection.db.collection(collection).deleteMany({})
+      })
+    } catch (error) {
+      dropped = false
+    }
+
+    return dropped
   }
 }
