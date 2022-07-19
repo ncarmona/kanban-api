@@ -6,6 +6,14 @@ import {
 } from "../../responses/authResponses"
 
 describe("Signup user", () => {
+  let email: string
+  const password = "12344"
+  beforeEach(() => {
+    cy.request({
+      url: "https://localhost:5000/test/drop-collections",
+      method: "PUT",
+    })
+  })
   it("invalid parameters must display error", () => {
     const message =
       "Missing parameters. Passed parameters: emaile, password. Required parameters: email, password"
@@ -75,16 +83,30 @@ describe("Signup user", () => {
 
       expect(response.body.message).to.eq(expectedMessage)
     })
+    cy.request({
+      url: "https://localhost:5000/test/drop-collections",
+      method: "PUT",
+    })
   })
   it("Existing email display error", () => {
     const expectedMessage = "Email already exists."
+    email = crypto.randomUUID() + "@gmail.com"
+    cy.request({
+      url: "https://localhost:5000/auth/signup",
+      method: "POST",
+      body: {
+        email,
+        password,
+      },
+    })
+
     cy.request({
       url: "https://localhost:5000/auth/signup",
       method: "POST",
       failOnStatusCode: false,
       body: {
-        email: "ncarm89@gmail.com",
-        password: "12344",
+        email,
+        password,
       },
     }).then((response: Cypress.Response<IResponse>) => {
       expect(response.body.message).to.eq(expectedMessage)
@@ -93,7 +115,15 @@ describe("Signup user", () => {
     })
   })
 })
+
 describe("Activate account", () => {
+  beforeEach(() => {
+    cy.request({
+      url: "https://localhost:5000/test/drop-collections",
+      method: "PUT",
+    })
+  })
+
   it("invalid parameters must display error", () => {
     const message =
       "Missing parameters. Passed parameters: emaile, activation_token. Required parameters: email, activation_token"
@@ -178,13 +208,26 @@ describe("Activate account", () => {
   it("Activate user", () => {
     const message =
       "Account assigned with email ncarm89@gmail.com has been activated successfully."
+    const email = "ncarm89@gmail.com"
+    const password = "12344"
+    const activation_token = "123456"
+    const body = {
+      email,
+      password,
+    }
+    cy.request({
+      url: "https://localhost:5000/auth/signup",
+      method: "POST",
+      body,
+    })
+
     cy.request({
       method: "GET",
       url: "https://localhost:5000/auth/activation",
       failOnStatusCode: false,
       qs: {
-        email: "ncarm89@gmail.com",
-        activation_token: "123456",
+        email,
+        activation_token,
       },
     }).then((response: Cypress.Response<IResponse>) => {
       expect(response.status).to.eq(200)
@@ -211,8 +254,12 @@ describe("Activate account", () => {
 })
 describe("Signin user", () => {
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce("auth")
+    cy.request({
+      url: "https://localhost:5000/test/drop-collections",
+      method: "PUT",
+    })
   })
+
   it("Invalid parameters must display error.", () => {
     const message =
       "Missing parameters. Passed parameters: email, activation_token. Required parameters: email, password"
@@ -279,22 +326,33 @@ describe("Signin user", () => {
       expect(response.body.message).to.eq(expectedResponse.message)
     })
   })
-  //TODO: Do tests when disable, delete
-  it.skip("User deleted permanently")
-  it.skip("User disabled")
-  it.skip("Logged user attempts to signin again")
-  it.skip("Logged user attempts to signup")
-  it.skip("Not activated user can not signin")
   it("User login successfully", () => {
     const expectedResponse: IResponse = userSigninSuccessfully({})
+    const email = "ncarm89@gmail.com"
+    const password = "12344"
+    const activation_token = "123456"
+    const body = { email, password }
+    const qs = { email, activation_token }
+
+    cy.request({
+      url: "https://localhost:5000/auth/signup",
+      method: "POST",
+      failOnStatusCode: false,
+      body,
+    })
+
+    cy.request({
+      method: "GET",
+      url: "https://localhost:5000/auth/activation",
+      failOnStatusCode: false,
+      qs,
+    })
+
     cy.request({
       method: "GET",
       url: "https://localhost:5000/auth/signin",
       failOnStatusCode: false,
-      body: {
-        email: "ncarm89@gmail.com",
-        password: "12344",
-      },
+      body,
     }).then((response: Cypress.Response<IResponse>) => {
       expect(response.status).to.eq(200)
       expect(response.body.status_code).to.eq(200)
@@ -305,11 +363,8 @@ describe("Signin user", () => {
       expect(response.body.data).to.haveOwnProperty("modified_at")
       expect(response.body.data).to.not.haveOwnProperty("password")
       expect(response.body.data).to.not.haveOwnProperty("_id")
+      expect(response.body.data).to.haveOwnProperty("email", email)
       expect(cy.getCookie("auth")).to.not.null
-      expect(response.body.data).to.haveOwnProperty(
-        "email",
-        "ncarm89@gmail.com"
-      )
     })
   })
 })
