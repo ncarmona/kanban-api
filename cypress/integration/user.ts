@@ -14,28 +14,26 @@ describe("Disable user", () => {
         email,
         password,
       },
-    }).then(() => {
-      cy.request({
-        url: "https://localhost:5000/auth/signin",
-        method: "GET",
-        body: {
-          email,
-          password,
-        },
-      })
+    })
+
+    cy.request({
+      url: "https://localhost:5000/auth/signin",
+      method: "GET",
+      body: {
+        email,
+        password,
+      },
     })
   })
-
   afterEach(() => {
     cy.request({
       url: "https://localhost:5000/auth/signout",
       method: "POST",
       failOnStatusCode: false,
-    }).then(() => {
-      cy.request({
-        url: "https://localhost:5000/test/drop-collections",
-        method: "PUT",
-      })
+    })
+    cy.request({
+      url: "https://localhost:5000/test/drop-collections",
+      method: "PUT",
     })
   })
   it("Disable user", () => {
@@ -77,15 +75,14 @@ describe("Enable user", () => {
         email,
         password,
       },
-    }).then(() => {
-      cy.request({
-        url: "https://localhost:5000/auth/signin",
-        method: "GET",
-        body: {
-          email,
-          password,
-        },
-      })
+    })
+    cy.request({
+      url: "https://localhost:5000/auth/signin",
+      method: "GET",
+      body: {
+        email,
+        password,
+      },
     })
   })
 
@@ -94,11 +91,10 @@ describe("Enable user", () => {
       url: "https://localhost:5000/auth/signout",
       method: "POST",
       failOnStatusCode: false,
-    }).then(() => {
-      cy.request({
-        url: "https://localhost:5000/test/drop-collections",
-        method: "PUT",
-      })
+    })
+    cy.request({
+      url: "https://localhost:5000/test/drop-collections",
+      method: "PUT",
     })
   })
 
@@ -141,15 +137,15 @@ describe("Delete user", () => {
         email,
         password,
       },
-    }).then(() => {
-      cy.request({
-        url: "https://localhost:5000/auth/signin",
-        method: "GET",
-        body: {
-          email,
-          password,
-        },
-      })
+    })
+
+    cy.request({
+      url: "https://localhost:5000/auth/signin",
+      method: "GET",
+      body: {
+        email,
+        password,
+      },
     })
   })
 
@@ -158,11 +154,11 @@ describe("Delete user", () => {
       url: "https://localhost:5000/auth/signout",
       method: "POST",
       failOnStatusCode: false,
-    }).then(() => {
-      cy.request({
-        url: "https://localhost:5000/test/drop-collections",
-        method: "PUT",
-      })
+    })
+
+    cy.request({
+      url: "https://localhost:5000/test/drop-collections",
+      method: "PUT",
     })
   })
 
@@ -179,15 +175,14 @@ describe("Delete user", () => {
     cy.request({
       url: "https://localhost:5000/user",
       method: "DELETE",
-    }).then(() => {
-      cy.request({
-        url: "https://localhost:5000/user",
-        method: "DELETE",
-        failOnStatusCode: false,
-      }).then((response: Cypress.Response<IResponse>) => {
-        expect(response.status).to.eq(404)
-        expect(response.body.status_code).to.eq(404)
-      })
+    })
+    cy.request({
+      url: "https://localhost:5000/user",
+      method: "DELETE",
+      failOnStatusCode: false,
+    }).then((response: Cypress.Response<IResponse>) => {
+      expect(response.status).to.eq(404)
+      expect(response.body.status_code).to.eq(404)
     })
   })
   it("Can not delete user without auth token", () => {
@@ -195,15 +190,14 @@ describe("Delete user", () => {
       url: "https://localhost:5000/auth/signout",
       method: "POST",
       failOnStatusCode: false,
-    }).then(() => {
-      cy.request({
-        url: "https://localhost:5000/user",
-        method: "DELETE",
-        failOnStatusCode: false,
-      }).then((response: Cypress.Response<IResponse>) => {
-        expect(response.status).to.eq(401)
-        expect(response.body.status_code).to.eq(401)
-      })
+    })
+    cy.request({
+      url: "https://localhost:5000/user",
+      method: "DELETE",
+      failOnStatusCode: false,
+    }).then((response: Cypress.Response<IResponse>) => {
+      expect(response.status).to.eq(401)
+      expect(response.body.status_code).to.eq(401)
     })
   })
 })
@@ -220,15 +214,15 @@ describe("Update user", () => {
         email,
         password,
       },
-    }).then(() => {
-      cy.request({
-        url: "https://localhost:5000/auth/signin",
-        method: "GET",
-        body: {
-          email,
-          password,
-        },
-      })
+    })
+
+    cy.request({
+      url: "https://localhost:5000/auth/signin",
+      method: "GET",
+      body: {
+        email,
+        password,
+      },
     })
   })
 
@@ -237,11 +231,11 @@ describe("Update user", () => {
       url: "https://localhost:5000/auth/signout",
       method: "POST",
       failOnStatusCode: false,
-    }).then(() => {
-      cy.request({
-        url: "https://localhost:5000/test/drop-collections",
-        method: "PUT",
-      })
+    })
+
+    cy.request({
+      url: "https://localhost:5000/test/drop-collections",
+      method: "PUT",
     })
   })
   it("Update photo", () => {
@@ -293,17 +287,16 @@ describe("Update user", () => {
       url: "https://localhost:5000/auth/signout",
       method: "POST",
       failOnStatusCode: false,
-    }).then(() => {
-      cy.request({
-        url: "https://localhost:5000/user",
-        method: "PUT",
-        body: {
-          name,
-        },
-        failOnStatusCode: false,
-      }).then((response: Cypress.Response<IResponse>) => {
-        expect(response.status).to.eq(401)
-      })
+    })
+    cy.request({
+      url: "https://localhost:5000/user",
+      method: "PUT",
+      body: {
+        name,
+      },
+      failOnStatusCode: false,
+    }).then((response: Cypress.Response<IResponse>) => {
+      expect(response.status).to.eq(401)
     })
   })
 })
