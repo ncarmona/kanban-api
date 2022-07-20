@@ -1,8 +1,8 @@
 import { CorsOptions } from "cors"
 
 const baseCors: CorsOptions = {
-  methods: ["GET", "PUT", "POST", "DELETE"],
-  allowedHeaders: "Content-Type,Authorization",
+  methods: ["POST", "GET", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
   optionsSuccessStatus: 200,
 }
@@ -10,6 +10,6 @@ const allowAll: CorsOptions = baseCors
 allowAll.origin = "*"
 
 const allowOnlyWeb: CorsOptions = baseCors
-allowOnlyWeb.origin = "localhost"
+allowOnlyWeb.origin = "https://localhost:3000"
 
 export { allowAll, allowOnlyWeb }
