@@ -18,7 +18,7 @@ describe("Disable user", () => {
 
     cy.request({
       url: "https://localhost:5000/auth/signin",
-      method: "GET",
+      method: "POST",
       body: {
         email,
         password,
@@ -78,7 +78,7 @@ describe("Enable user", () => {
     })
     cy.request({
       url: "https://localhost:5000/auth/signin",
-      method: "GET",
+      method: "POST",
       body: {
         email,
         password,
@@ -141,7 +141,7 @@ describe("Delete user", () => {
 
     cy.request({
       url: "https://localhost:5000/auth/signin",
-      method: "GET",
+      method: "POST",
       body: {
         email,
         password,
@@ -218,7 +218,7 @@ describe("Update user", () => {
 
     cy.request({
       url: "https://localhost:5000/auth/signin",
-      method: "GET",
+      method: "POST",
       body: {
         email,
         password,

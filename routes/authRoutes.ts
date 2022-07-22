@@ -78,7 +78,7 @@ export class AuthRoutes implements IRoute {
       cors(allowAll),
       guestUser(),
     ]
-    this.core.get(route, middlewares, async (req: Request, res: Response) => {
+    this.core.post(route, middlewares, async (req: Request, res: Response) => {
       const { email, password } = req.body
       const auth: IAuth = {
         email,

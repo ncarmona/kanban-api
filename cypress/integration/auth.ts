@@ -264,7 +264,7 @@ describe("Signin user", () => {
     const message =
       "Missing parameters. Passed parameters: email, activation_token. Required parameters: email, password"
     cy.request({
-      method: "GET",
+      method: "POST",
       url: "https://localhost:5000/auth/signin",
       failOnStatusCode: false,
       body: {
@@ -281,7 +281,7 @@ describe("Signin user", () => {
     const message =
       "Missing parameters. Passed parameters: password. Required parameters: email, password"
     cy.request({
-      method: "GET",
+      method: "POST",
       url: "https://localhost:5000/auth/signin",
       failOnStatusCode: false,
       body: {
@@ -297,7 +297,7 @@ describe("Signin user", () => {
     const message =
       "Missing parameters. Passed parameters: email. Required parameters: email, password"
     cy.request({
-      method: "GET",
+      method: "POST",
       url: "https://localhost:5000/auth/signin",
       failOnStatusCode: false,
       body: {
@@ -313,7 +313,7 @@ describe("Signin user", () => {
     const expectedResponse: IResponse = userDoesNotExists()
     expectedResponse.message
     cy.request({
-      method: "GET",
+      method: "POST",
       url: "https://localhost:5000/auth/signin",
       failOnStatusCode: false,
       body: {
@@ -349,7 +349,7 @@ describe("Signin user", () => {
     })
 
     cy.request({
-      method: "GET",
+      method: "POST",
       url: "https://localhost:5000/auth/signin",
       failOnStatusCode: false,
       body,
