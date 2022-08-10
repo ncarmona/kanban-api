@@ -13,8 +13,8 @@ export function generateAuthCookie(res: Response, user: IUser): void {
   }
   const publicTokenOptions: CookieOptions = {
     sameSite: "lax",
-    httpOnly: true,
-    secure: false,
+    httpOnly: false,
+    secure: true,
     expires,
   }
   const privateTokenOptions: CookieOptions = {

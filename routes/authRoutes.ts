@@ -99,6 +99,8 @@ export class AuthRoutes implements IRoute {
 
     this.core.post(route, middlewares, async (_req: Request, res: Response) => {
       res.clearCookie("auth")
+      res.clearCookie("public_auth")
+      res.clearCookie("private_auth")
       res.status(200).send(signoutSuccessful())
     })
   }
