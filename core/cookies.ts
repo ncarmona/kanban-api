@@ -13,8 +13,8 @@ export function generateAuthCookie(res: Response, user: IUser): void {
   }
   const publicTokenOptions: CookieOptions = {
     sameSite: "lax",
-    httpOnly: false,
-    secure: true,
+    httpOnly: true,
+    secure: false,
     expires,
   }
   const privateTokenOptions: CookieOptions = {
@@ -26,5 +26,5 @@ export function generateAuthCookie(res: Response, user: IUser): void {
 
   res.cookie("auth", generateAuthToken(user), tokenOptions)
   res.cookie("public_auth", expires, publicTokenOptions)
-  res.cookie("private_auth", expires, publicTokenOptions)
+  res.cookie("private_auth", expires, privateTokenOptions)
 }
