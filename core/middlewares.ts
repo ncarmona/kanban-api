@@ -30,9 +30,10 @@ export function requiredParameters(
 
 export function registeredUser() {
   return (req: Request, res: Response, next: NextFunction) => {
-    const { auth } = req.cookies
+    const { auth, public_auth, private_auth } = req.cookies
+
     const response: IResponse = userMustBeRegistered()
-    if (auth !== undefined) {
+    if (auth !== undefined && public_auth === private_auth) {
       res.locals.user = decodeAuthToken(req.cookies.auth)
       next()
     } else res.status(response.status_code).send(response)
