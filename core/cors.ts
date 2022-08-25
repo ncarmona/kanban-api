@@ -1,7 +1,7 @@
 import { CorsOptions } from "cors"
 
 const baseCors: CorsOptions = {
-  methods: ["POST", "GET", "PATCH", "DELETE", "OPTIONS"],
+  methods: ["POST", "GET", "PATCH", "DELETE", "OPTIONS", "PUT"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
   optionsSuccessStatus: 200,
