@@ -24,4 +24,7 @@ export class UserUseCases {
   update(user: IUser): Promise<UserModel> {
     return this.database.update(user)
   }
+  getUserData(user: string): Promise<UserModel> {
+    return this.database.getUserData(user)
+  }
 }

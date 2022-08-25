@@ -22,6 +22,7 @@ export class UserRoutes implements IRoute {
     this.enable("/enable")
     this.delete("")
     this.update("")
+    this.getUserData("")
   }
   private update(action: string) {
     const userController = new UserController()
@@ -33,6 +34,16 @@ export class UserRoutes implements IRoute {
       const userData = req.body as IUser
       userData._id = _id
       const response: IResponse = await userController.update(userData)
+      res.status(response.status_code).send(response)
+    })
+  }
+  private getUserData(action: string) {
+    const userController = new UserController()
+    const route = this.base_route + action
+    const middlewares = [cors(allowAll), registeredUser()]
+    this.core.get(route, middlewares, async (req: Request, res: Response) => {
+      const { _id } = res.locals.user as IUser
+      const response: IResponse = await userController.getUserData(_id)
       res.status(response.status_code).send(response)
     })
   }

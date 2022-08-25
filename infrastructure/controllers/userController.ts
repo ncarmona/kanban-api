@@ -74,4 +74,18 @@ export class UserController {
 
     return response
   }
+
+  async getUserData(id: string): Promise<IResponse> {
+    let response: IResponse
+    try {
+      const userModel: UserModel = await this.userUseCases.getUserData(id)
+      response = !userModel.getDisabled()
+        ? userHasBeenUpdated(userModel.getModel())
+        : unexpectedError()
+    } catch (error) {
+      response = error === null ? userDoesNotExists() : unexpectedError()
+    }
+
+    return response
+  }
 }

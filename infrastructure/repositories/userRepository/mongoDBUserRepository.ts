@@ -76,4 +76,18 @@ export class MongoDBUserRepository implements UserRepository {
         .catch((e: MongooseError) => reject(e))
     })
   }
+  async getUserData(_id: string): Promise<UserModel> {
+    return new Promise((resolve, reject) => {
+      const deleted = false
+      const filter: FilterQuery<unknown> = { _id, deleted }
+
+      mongoDBUser
+        .findById(filter)
+        .select(this.hiddenFields)
+        .then((u: IUser) => {
+          u === null ? reject(null) : resolve(new UserModel(u))
+        })
+        .catch((e: MongooseError) => reject(e))
+    })
+  }
 }

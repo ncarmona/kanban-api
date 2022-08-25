@@ -6,4 +6,5 @@ export interface UserRepository {
   toggleDisable(id: string, disabled: boolean): Promise<UserModel>
   delete(id: string): Promise<UserModel>
   update(user: IUser): Promise<UserModel>
+  getUserData(_id: string): Promise<UserModel>
 }
