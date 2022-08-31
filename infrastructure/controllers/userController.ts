@@ -12,6 +12,12 @@ import { UserRepository } from "@repositories/userRepository/userRepository"
 import { UserModel } from "@models/userModel/user.model"
 import { unexpectedError } from "@core/responses/responses"
 import { IUser } from "@interfaces/IUser"
+import {
+  getPublicFileURL,
+  uploadProfilePhoto as uploadAWSProfilePhoto,
+} from "../../utils/s3aws"
+import { AWSError, S3 } from "aws-sdk"
+import { removeTempFile } from "../../utils/fs"
 
 export class UserController {
   private readonly userUseCases: UserUseCases
@@ -60,15 +66,49 @@ export class UserController {
 
     return response
   }
+  getPhotoName(user: IUser, photo: Express.Multer.File) {
+    let filename: string
 
-  async update(user: IUser): Promise<IResponse> {
+    if (user.photoName === undefined) {
+      const extension: string[] = photo.originalname.split(".")
+      filename = photo.filename + "." + extension[extension.length - 1]
+    } else filename = user.photoName
+
+    return filename
+  }
+
+  async uploadProfilePhoto(user: IUser, photo: Express.Multer.File) {
+    try {
+      const photoUpload = await uploadAWSProfilePhoto(photo)
+      await photoUpload.send((err: AWSError, data: S3.PutObjectOutput) => {
+        if (data) removeTempFile(photo.filename)
+        if (err) console.error(err)
+      })
+      user.photo = this.getPhotoName(user, photo)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  async update(user: IUser, photo: Express.Multer.File): Promise<IResponse> {
     let response: IResponse
     try {
+      const getUser: UserModel = await this.userUseCases.getUserData(user._id)
+      if (photo !== undefined) {
+        photo.originalname =
+          getUser.getPhoto() ?? this.getPhotoName(user, photo)
+        this.uploadProfilePhoto(user, photo)
+        user.photo = getPublicFileURL(
+          "kanban-client",
+          "eu-west-3",
+          photo.originalname
+        )
+      }
       const userModel: UserModel = await this.userUseCases.update(user)
       response = !userModel.getDisabled()
         ? userHasBeenUpdated(userModel.getModel())
         : unexpectedError()
     } catch (error) {
+      console.log(error)
       response = error === null ? userDoesNotExists() : unexpectedError()
     }
 
