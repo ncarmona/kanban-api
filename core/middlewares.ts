@@ -6,6 +6,7 @@ import {
   missingParameters,
 } from "./responses/responses"
 import { decodeAuthToken } from "./auth"
+import Multer from "multer"
 
 export enum RequestObject {
   QUERY = "query",
@@ -49,3 +50,5 @@ export function guestUser() {
       : res.status(response.status_code).send(response)
   }
 }
+
+export const upload = Multer({ dest: "./uploads/" })
