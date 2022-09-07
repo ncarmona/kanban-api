@@ -12,7 +12,8 @@ export async function uploadProfilePhoto(
 
   return s3.putObject({
     Body: fs.createReadStream(photo.path),
-    Bucket: "kanban-client",
+    Bucket: "kanban-uploads",
+    ContentType: "image/webp",
     Key,
   })
 }
