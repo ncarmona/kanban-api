@@ -66,18 +66,23 @@ export class UserController {
 
     return response
   }
-  getPhotoName(user: IUser, photo: Express.Multer.File) {
-    let filename: string
-
-    if (user.photoName === undefined) {
-      const extension: string[] = photo.originalname.split(".")
-      filename = photo.filename + "." + extension[extension.length - 1]
-    } else filename = user.photoName
-
-    return filename
+  private getPhotoNameFromURL(user: IUser) {
+    const { photo } = user
+    return photo.split("/").at(-1)
   }
+  private getPhotonameFromFile(photo: Express.Multer.File) {
+    const { originalname, filename } = photo
+    const name: string[] = [filename]
 
-  async uploadProfilePhoto(user: IUser, photo: Express.Multer.File) {
+    name.push(originalname.split(".").at(-1))
+    return name.join(".")
+  }
+  private getPhotoName(user: IUser, photo: Express.Multer.File) {
+    return user.photo === undefined
+      ? this.getPhotonameFromFile(photo)
+      : this.getPhotoNameFromURL(user)
+  }
+  private async uploadProfilePhoto(user: IUser, photo: Express.Multer.File) {
     try {
       const photoUpload = await uploadAWSProfilePhoto(photo)
       await photoUpload.send((err: AWSError, data: S3.PutObjectOutput) => {
@@ -94,8 +99,7 @@ export class UserController {
     try {
       const getUser: UserModel = await this.userUseCases.getUserData(user._id)
       if (photo !== undefined) {
-        photo.originalname =
-          getUser.getPhoto() ?? this.getPhotoName(user, photo)
+        photo.originalname = this.getPhotoName(getUser.getModel(), photo)
         this.uploadProfilePhoto(user, photo)
         user.photo = getPublicFileURL(
           "kanban-client",
