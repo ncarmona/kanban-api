@@ -17,6 +17,11 @@ export class BoardController {
     const board: BoardModel = await this.boardUseCases.create(name, user)
     const boardObject: IBoard = board.getModel()
 
-    return createBoardSuccessful(boardObject)
+  }
+  async exists(name: string): Promise<IResponse> {
+    const formatedName: string = name.replace(/-/g, " ")
+    const boardExists: boolean = await this.boardUseCases.exists(formatedName)
+
+    return boardAlreadyExists(boardExists)
   }
 }
