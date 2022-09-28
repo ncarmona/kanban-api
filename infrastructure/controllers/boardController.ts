@@ -4,7 +4,12 @@ import { MongoDBBoardRepository } from "../repositories/boardRepository/mongoDBB
 import { BoardRepository } from "../repositories/boardRepository/boardRepository"
 import { BoardModel } from "../../domain/models/boardModel/board.model"
 import { IBoard } from "../../domain/interfaces/IBoard"
-import { createBoardSuccessful } from "../../responses/board/boardResponses"
+import {
+  createBoardSuccessful,
+  retrievedBoard,
+  boardAlreadyExists,
+  boardAlreadyExistsShowName,
+} from "../../responses/board/boardResponses"
 
 export class BoardController {
   private readonly boardUseCases: BoardUseCases
