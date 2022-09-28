@@ -9,6 +9,22 @@ export function createBoardSuccessful(data: IBoard): IResponse {
   }
 }
 
+export function retrievedBoard(data: IBoard): IResponse {
+  return {
+    data,
+    message: "Board retrieved successfully",
+    status_code: 200,
+  }
+}
+
+export function boardAlreadyExistsShowName(name: string): IResponse {
+  return {
+    data: {},
+    message: `Board ${name} already exists.`,
+    status_code: 500,
+  }
+}
+
 export function boardAlreadyExists(exists: boolean): IResponse {
   return {
     data: { exists },
