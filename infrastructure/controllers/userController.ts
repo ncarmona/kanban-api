@@ -102,7 +102,7 @@ export class UserController {
         photo.originalname = this.getPhotoName(getUser.getModel(), photo)
         this.uploadProfilePhoto(user, photo)
         user.photo = getPublicFileURL(
-          "kanban-client",
+          "kanban-uploads",
           "eu-west-3",
           photo.originalname
         )

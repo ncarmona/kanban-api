@@ -3,8 +3,7 @@ import { UserModel } from "../../../domain/models/userModel/user.model"
 import { UserRepository } from "./userRepository"
 import { MongoDBConnector } from "../../../core/repository/connectors/MongoDBConnector"
 import { mongoDBUser } from "../../../core/repository/MongoDB/Schemas/User"
-import { MongooseError } from "mongoose"
-import { FilterQuery, UpdateQuery } from "mongoose"
+import { FilterQuery, UpdateQuery, MongooseError } from "mongoose"
 import { IConnector } from "../../../core/repository/connectors/IConnector"
 
 export class MongoDBUserRepository implements UserRepository {
