@@ -8,6 +8,8 @@ import { BoardModel } from "../../../domain/models/boardModel/board.model"
 
 export class MongoDBBoardRepository implements BoardRepository {
   private readonly connector: IConnector
+  private readonly hiddenFieldsBoard: string[]
+  private readonly hiddenFieldsUser: string[]
 
   constructor() {
     this.connector = new MongoDBConnector()
@@ -38,6 +40,18 @@ export class MongoDBBoardRepository implements BoardRepository {
         const retrievedBoard = await mongoDBBoard.create(board)
         return new BoardModel(retrievedBoard)
       } else return null
+    } catch (error) {
+      return error
+    }
+  }
+  async get(board: string): Promise<BoardModel> {
+    const filter: FilterQuery<unknown> = { name: board }
+    try {
+      const board: IBoard = await mongoDBBoard
+        .findOne(filter)
+        .populate("owner", this.hiddenFieldsUser)
+        .select(this.hiddenFieldsBoard)
+      return new BoardModel(board)
     } catch (error) {
       return error
     }
