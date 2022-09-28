@@ -12,6 +12,7 @@ import {
   boardEnabled,
   boardDoesNotExists,
   boardDisabled,
+  boardDeleted,
 } from "../../responses/board/boardResponses"
 import { unexpectedError } from "../../core/responses/responses"
 
@@ -67,6 +68,19 @@ export class BoardController {
       return enabledBoard === null
         ? boardDoesNotExists(formatedName)
         : boardDisabled(enabledBoard.getModel())
+    } catch (error) {
+      return unexpectedError()
+    }
+  }
+  async delete(board: string): Promise<IResponse> {
+    const formatedName: string = board.replace(/-/g, " ")
+    try {
+      const enabledBoard: BoardModel = await this.boardUseCases.delete(
+        formatedName
+      )
+      return enabledBoard === null
+        ? boardDoesNotExists(formatedName)
+        : boardDeleted(enabledBoard.getModel())
     } catch (error) {
       return unexpectedError()
     }

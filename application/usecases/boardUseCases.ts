@@ -22,4 +22,7 @@ export class BoardUseCases {
   disable(board: string): Promise<BoardModel> {
     return this.database.disable(board)
   }
+  delete(board: string): Promise<BoardModel> {
+    return this.database.delete(board)
+  }
 }

@@ -28,6 +28,7 @@ export class BoardRoutes implements IRoute {
     this.boardExists("/:name/exists")
     this.enableBoard("/:name/enable")
     this.disableBoard("/:name/disable")
+    this.deleteBoard("/:name")
   }
   private createBoard(action?: string) {
     const route =
@@ -90,5 +91,21 @@ export class BoardRoutes implements IRoute {
       )
       res.status(response.status_code).send(response)
     })
+  }
+  private deleteBoard(action?: string) {
+    const route =
+      action !== undefined ? this.base_route + action : this.base_route
+    const middlewares = [cors(allowAll), registeredUser()]
+    this.core.delete(
+      route,
+      middlewares,
+      async (req: Request, res: Response) => {
+        const { name } = req.params
+        const response: IResponse = await this.boardController.delete(
+          name as string
+        )
+        res.status(response.status_code).send(response)
+      }
+    )
   }
 }

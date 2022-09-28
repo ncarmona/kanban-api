@@ -90,10 +90,27 @@ export class MongoDBBoardRepository implements BoardRepository {
     const options: QueryOptions = { new: true }
     const hiddenFields: string[] = [...this.hiddenFieldsBoard, "-owner"]
     try {
-      const enabledBoard = await mongoDBBoard
+      const disabledBoard = await mongoDBBoard
         .findOneAndUpdate(filter, projection, options)
         .select(hiddenFields)
-      return new BoardModel(enabledBoard)
+      return new BoardModel(disabledBoard)
+    } catch (error) {
+      return error
+    }
+  }
+  async delete(board: string): Promise<BoardModel> {
+    const filter: FilterQuery<unknown> = { name: board }
+    const projection: ProjectionType<unknown> = {
+      deleted: true,
+      modified_at: new Date(),
+    }
+    const options: QueryOptions = { new: true }
+    const hiddenFields: string[] = [...this.hiddenFieldsBoard, "-owner"]
+    try {
+      const deletedBoard = await mongoDBBoard
+        .findOneAndUpdate(filter, projection, options)
+        .select(hiddenFields)
+      return new BoardModel(deletedBoard)
     } catch (error) {
       return error
     }

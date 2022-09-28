@@ -56,3 +56,10 @@ export function boardDoesNotExists(board: string): IResponse {
     status_code: 404,
   }
 }
+export function boardDeleted(board: IBoard): IResponse {
+  return {
+    data: board,
+    message: `Board ${board.name} has been deleted`,
+    status_code: 404,
+  }
+}
