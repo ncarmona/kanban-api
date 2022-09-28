@@ -8,3 +8,11 @@ export function createBoardSuccessful(data: IBoard): IResponse {
     status_code: 200,
   }
 }
+
+export function boardAlreadyExists(exists: boolean): IResponse {
+  return {
+    data: { exists },
+    message: exists ? "Board exists" : "Board does not exists",
+    status_code: 200,
+  }
+}
