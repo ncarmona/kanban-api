@@ -18,11 +18,9 @@ export function requiredParameters(
 ) {
   return (req: Request, res: Response, next: NextFunction) => {
     const parameters: string[] = Object.keys(req[reqObj])
-    const validParam: boolean = requiredParameters.every((param: string) => {
-      const noBlankParameterValue =
-        new String(req[reqObj][param]).trim().length > 0
-      parameters.includes(param) && noBlankParameterValue
-    })
+    const validParam: boolean = requiredParameters.every(
+      (param: string) => new String(req[reqObj][param] ?? "").trim().length > 0
+    )
     const response: IResponse = missingParameters(
       parameters,
       requiredParameters
