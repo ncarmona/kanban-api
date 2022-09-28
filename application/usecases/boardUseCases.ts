@@ -10,4 +10,7 @@ export class BoardUseCases {
   create(board: string, user: string): Promise<BoardModel> {
     return this.database.create(board, user)
   }
+  exists(board: string): Promise<boolean> {
+    return this.database.exists(board)
+  }
 }
