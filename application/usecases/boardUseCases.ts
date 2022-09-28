@@ -19,4 +19,7 @@ export class BoardUseCases {
   enable(board: string): Promise<BoardModel> {
     return this.database.enable(board)
   }
+  disable(board: string): Promise<BoardModel> {
+    return this.database.disable(board)
+  }
 }

@@ -41,6 +41,14 @@ export function boardEnabled(data: IBoard): IResponse {
   }
 }
 
+export function boardDisabled(data: IBoard): IResponse {
+  return {
+    data,
+    message: "Board has been disabled successfully",
+    status_code: 200,
+  }
+}
+
 export function boardDoesNotExists(board: string): IResponse {
   return {
     data: {},

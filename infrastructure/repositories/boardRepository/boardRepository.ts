@@ -5,4 +5,5 @@ export interface BoardRepository {
   get(board: string): Promise<BoardModel>
   exists(board: string): Promise<boolean>
   enable(board: string): Promise<BoardModel>
+  disable(board: string): Promise<BoardModel>
 }

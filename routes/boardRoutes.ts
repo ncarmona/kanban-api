@@ -27,6 +27,7 @@ export class BoardRoutes implements IRoute {
     this.getBoard("/:name")
     this.boardExists("/:name/exists")
     this.enableBoard("/:name/enable")
+    this.disableBoard("/:name/disable")
   }
   private createBoard(action?: string) {
     const route =
@@ -73,6 +74,18 @@ export class BoardRoutes implements IRoute {
     this.core.put(route, middlewares, async (req: Request, res: Response) => {
       const { name } = req.params
       const response: IResponse = await this.boardController.enable(
+        name as string
+      )
+      res.status(response.status_code).send(response)
+    })
+  }
+  private disableBoard(action?: string) {
+    const route =
+      action !== undefined ? this.base_route + action : this.base_route
+    const middlewares = [cors(allowAll), registeredUser()]
+    this.core.put(route, middlewares, async (req: Request, res: Response) => {
+      const { name } = req.params
+      const response: IResponse = await this.boardController.disable(
         name as string
       )
       res.status(response.status_code).send(response)

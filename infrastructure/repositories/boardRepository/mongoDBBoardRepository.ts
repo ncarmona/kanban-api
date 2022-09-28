@@ -71,7 +71,24 @@ export class MongoDBBoardRepository implements BoardRepository {
       modified_at: new Date(),
     }
     const options: QueryOptions = { new: true }
-    const hiddenFields: string [] = [...this.hiddenFieldsBoard, "-owner"]
+    const hiddenFields: string[] = [...this.hiddenFieldsBoard, "-owner"]
+    try {
+      const enabledBoard = await mongoDBBoard
+        .findOneAndUpdate(filter, projection, options)
+        .select(hiddenFields)
+      return new BoardModel(enabledBoard)
+    } catch (error) {
+      return error
+    }
+  }
+  async disable(board: string): Promise<BoardModel> {
+    const filter: FilterQuery<unknown> = { name: board }
+    const projection: ProjectionType<unknown> = {
+      disabled: true,
+      modified_at: new Date(),
+    }
+    const options: QueryOptions = { new: true }
+    const hiddenFields: string[] = [...this.hiddenFieldsBoard, "-owner"]
     try {
       const enabledBoard = await mongoDBBoard
         .findOneAndUpdate(filter, projection, options)
