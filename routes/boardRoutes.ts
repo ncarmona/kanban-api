@@ -26,6 +26,7 @@ export class BoardRoutes implements IRoute {
     this.createBoard()
     this.getBoard("/:name")
     this.boardExists("/:name/exists")
+    this.enableBoard("/:name/enable")
   }
   private createBoard(action?: string) {
     const route =
@@ -60,6 +61,18 @@ export class BoardRoutes implements IRoute {
     this.core.get(route, middlewares, async (req: Request, res: Response) => {
       const { name } = req.params
       const response: IResponse = await this.boardController.exists(
+        name as string
+      )
+      res.status(response.status_code).send(response)
+    })
+  }
+  private enableBoard(action?: string) {
+    const route =
+      action !== undefined ? this.base_route + action : this.base_route
+    const middlewares = [cors(allowAll), registeredUser()]
+    this.core.put(route, middlewares, async (req: Request, res: Response) => {
+      const { name } = req.params
+      const response: IResponse = await this.boardController.enable(
         name as string
       )
       res.status(response.status_code).send(response)

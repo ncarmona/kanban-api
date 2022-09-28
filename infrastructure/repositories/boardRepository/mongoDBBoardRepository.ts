@@ -2,7 +2,7 @@ import { IBoard } from "../../../domain/interfaces/IBoard"
 import { BoardRepository } from "./boardRepository"
 import { MongoDBConnector } from "../../../core/repository/connectors/MongoDBConnector"
 import { IConnector } from "../../../core/repository/connectors/IConnector"
-import { FilterQuery } from "mongoose"
+import { FilterQuery, ProjectionType, QueryOptions } from "mongoose"
 import { mongoDBBoard } from "../../../core/repository/MongoDB/Schemas/Board"
 import { BoardModel } from "../../../domain/models/boardModel/board.model"
 
@@ -62,6 +62,23 @@ export class MongoDBBoardRepository implements BoardRepository {
       return (await mongoDBBoard.exists(filter)) !== null
     } catch (error) {
       console.log(error)
+    }
+  }
+  async enable(board: string): Promise<BoardModel> {
+    const filter: FilterQuery<unknown> = { name: board }
+    const projection: ProjectionType<unknown> = {
+      disabled: false,
+      modified_at: new Date(),
+    }
+    const options: QueryOptions = { new: true }
+    const hiddenFields: string [] = [...this.hiddenFieldsBoard, "-owner"]
+    try {
+      const enabledBoard = await mongoDBBoard
+        .findOneAndUpdate(filter, projection, options)
+        .select(hiddenFields)
+      return new BoardModel(enabledBoard)
+    } catch (error) {
+      return error
     }
   }
 }

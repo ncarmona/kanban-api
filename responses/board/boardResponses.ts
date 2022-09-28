@@ -32,3 +32,19 @@ export function boardAlreadyExists(exists: boolean): IResponse {
     status_code: 200,
   }
 }
+
+export function boardEnabled(data: IBoard): IResponse {
+  return {
+    data,
+    message: "Board has been enabled successfully",
+    status_code: 200,
+  }
+}
+
+export function boardDoesNotExists(board: string): IResponse {
+  return {
+    data: {},
+    message: `Board ${board} does not exists`,
+    status_code: 404,
+  }
+}

@@ -16,4 +16,7 @@ export class BoardUseCases {
   exists(board: string): Promise<boolean> {
     return this.database.exists(board)
   }
+  enable(board: string): Promise<BoardModel> {
+    return this.database.enable(board)
+  }
 }

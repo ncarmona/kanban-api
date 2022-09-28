@@ -9,7 +9,10 @@ import {
   retrievedBoard,
   boardAlreadyExists,
   boardAlreadyExistsShowName,
+  boardEnabled,
+  boardDoesNotExists,
 } from "../../responses/board/boardResponses"
+import { unexpectedError } from "../../core/responses/responses"
 
 export class BoardController {
   private readonly boardUseCases: BoardUseCases
@@ -40,5 +43,18 @@ export class BoardController {
     const boardExists: boolean = await this.boardUseCases.exists(formatedName)
 
     return boardAlreadyExists(boardExists)
+  }
+  async enable(board: string): Promise<IResponse> {
+    const formatedName: string = board.replace(/-/g, " ")
+    try {
+      const enabledBoard: BoardModel = await this.boardUseCases.enable(
+        formatedName
+      )
+      return enabledBoard === null
+        ? boardDoesNotExists(formatedName)
+        : boardEnabled(enabledBoard.getModel())
+    } catch (error) {
+      return unexpectedError()
+    }
   }
 }
