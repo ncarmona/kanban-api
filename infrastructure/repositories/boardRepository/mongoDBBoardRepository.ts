@@ -45,7 +45,7 @@ export class MongoDBBoardRepository implements BoardRepository {
     }
   }
   async get(board: string): Promise<BoardModel> {
-    const filter: FilterQuery<unknown> = { name: board }
+    const filter: FilterQuery<unknown> = { name: board, deleted: false }
     try {
       const board: IBoard = await mongoDBBoard
         .findOne(filter)
@@ -53,7 +53,7 @@ export class MongoDBBoardRepository implements BoardRepository {
         .select(this.hiddenFieldsBoard)
       return new BoardModel(board)
     } catch (error) {
-      return error
+      return null
     }
   }
   async exists(board: string): Promise<boolean> {
