@@ -29,6 +29,7 @@ export class BoardRoutes implements IRoute {
     this.enableBoard("/:name/enable")
     this.disableBoard("/:name/disable")
     this.deleteBoard("/:name")
+    this.updateBoard("/:name")
   }
   private createBoard(action?: string) {
     const route =
@@ -107,5 +108,24 @@ export class BoardRoutes implements IRoute {
         res.status(response.status_code).send(response)
       }
     )
+  }
+  private updateBoard(action?: string) {
+    const route =
+      action !== undefined ? this.base_route + action : this.base_route
+    const middlewares = [
+      cors(allowAll),
+      registeredUser(),
+      requiredParameters(["newName"], RequestObject.BODY),
+    ]
+    this.core.put(route, middlewares, async (req: Request, res: Response) => {
+      // const { _id: user } = res.locals.user
+      const { newName } = req.body
+      const { name } = req.params
+      const response: IResponse = await this.boardController.update(
+        name,
+        newName
+      )
+      res.status(response.status_code).send(response)
+    })
   }
 }

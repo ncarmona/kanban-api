@@ -63,3 +63,10 @@ export function boardDeleted(board: IBoard): IResponse {
     status_code: 404,
   }
 }
+export function updatedBoard(data: IBoard): IResponse {
+  return {
+    data,
+    message: "Board updated successfully",
+    status_code: 200,
+  }
+}

@@ -13,6 +13,7 @@ import {
   boardDoesNotExists,
   boardDisabled,
   boardDeleted,
+  updatedBoard,
 } from "../../responses/board/boardResponses"
 import { unexpectedError } from "../../core/responses/responses"
 
@@ -89,6 +90,20 @@ export class BoardController {
       return enabledBoard === null
         ? boardDoesNotExists(formatedName)
         : boardDeleted(enabledBoard.getModel())
+    } catch (error) {
+      return unexpectedError()
+    }
+  }
+  async update(board: string, newName: string): Promise<IResponse> {
+    const formatedName: string = board.replace(/-/g, " ")
+    try {
+      const enabledBoard: BoardModel = await this.boardUseCases.update(
+        formatedName,
+        newName
+      )
+      return enabledBoard === null
+        ? boardDoesNotExists(formatedName)
+        : updatedBoard(enabledBoard.getModel())
     } catch (error) {
       return unexpectedError()
     }

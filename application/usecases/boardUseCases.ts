@@ -25,4 +25,7 @@ export class BoardUseCases {
   delete(board: string): Promise<BoardModel> {
     return this.database.delete(board)
   }
+  update(board: string, newName: string): Promise<BoardModel> {
+    return this.database.update(board, newName)
+  }
 }

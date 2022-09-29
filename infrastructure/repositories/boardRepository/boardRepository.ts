@@ -7,4 +7,5 @@ export interface BoardRepository {
   enable(board: string): Promise<BoardModel>
   disable(board: string): Promise<BoardModel>
   delete(board: string): Promise<BoardModel>
+  update(board: string, newName: string): Promise<BoardModel>
 }

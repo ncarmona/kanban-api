@@ -119,4 +119,21 @@ export class MongoDBBoardRepository implements BoardRepository {
       return error
     }
   }
+  async update(board: string, newName: string): Promise<BoardModel> {
+    const filter: FilterQuery<unknown> = { name: board }
+    const projection: ProjectionType<unknown> = {
+      name: newName,
+      modified_at: new Date(),
+    }
+    const options: QueryOptions = { new: true }
+    const hiddenFields: string[] = [...this.hiddenFieldsBoard, "-owner"]
+    try {
+      const deletedBoard = await mongoDBBoard
+        .findOneAndUpdate(filter, projection, options)
+        .select(hiddenFields)
+      return new BoardModel(deletedBoard)
+    } catch (error) {
+      return error
+    }
+  }
 }
