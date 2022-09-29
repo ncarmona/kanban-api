@@ -69,7 +69,7 @@ export class MongoDBBoardRepository implements BoardRepository {
     }
   }
   async enable(board: string): Promise<BoardModel> {
-    const filter: FilterQuery<unknown> = { name: board }
+    const filter: FilterQuery<unknown> = { name: board, deleted: false }
     const projection: ProjectionType<unknown> = {
       disabled: false,
       modified_at: new Date(),
@@ -82,11 +82,11 @@ export class MongoDBBoardRepository implements BoardRepository {
         .select(hiddenFields)
       return new BoardModel(enabledBoard)
     } catch (error) {
-      return error
+      return null
     }
   }
   async disable(board: string): Promise<BoardModel> {
-    const filter: FilterQuery<unknown> = { name: board }
+    const filter: FilterQuery<unknown> = { name: board, deleted: false }
     const projection: ProjectionType<unknown> = {
       disabled: true,
       modified_at: new Date(),
@@ -99,7 +99,7 @@ export class MongoDBBoardRepository implements BoardRepository {
         .select(hiddenFields)
       return new BoardModel(disabledBoard)
     } catch (error) {
-      return error
+      return null
     }
   }
   async delete(board: string): Promise<BoardModel> {
