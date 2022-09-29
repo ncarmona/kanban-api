@@ -57,11 +57,15 @@ export class MongoDBBoardRepository implements BoardRepository {
     }
   }
   async exists(board: string): Promise<boolean> {
-    const filter: FilterQuery<unknown> = { name: board }
+    const filter: FilterQuery<unknown> = {
+      name: board,
+      deleted: false,
+      disabled: false,
+    }
     try {
       return (await mongoDBBoard.exists(filter)) !== null
     } catch (error) {
-      console.log(error)
+      return null
     }
   }
   async enable(board: string): Promise<BoardModel> {
