@@ -80,10 +80,10 @@ export class BoardController {
         const boardOwner: IUser = retrievedBoard.getOwner() as IUser
         const boardOwnerID: string = boardOwner?._id.toString() ?? null
         if (boardOwnerID === userRequester) {
-          const enabledBoard: BoardModel = await this.boardUseCases.disable(
+          const disabledBoard: BoardModel = await this.boardUseCases.disable(
             formatedName
           )
-          response = boardDisabled(enabledBoard.getModel())
+          response = boardDisabled(disabledBoard.getModel())
         } else response = notOwner()
       }
       return response
