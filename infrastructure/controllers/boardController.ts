@@ -70,15 +70,23 @@ export class BoardController {
       return unexpectedError()
     }
   }
-  async disable(board: string): Promise<IResponse> {
+  async disable(board: string, userRequester: string): Promise<IResponse> {
     const formatedName: string = board.replace(/-/g, " ")
     try {
-      const enabledBoard: BoardModel = await this.boardUseCases.disable(
-        formatedName
-      )
-      return enabledBoard === null
-        ? boardDoesNotExists(formatedName)
-        : boardDisabled(enabledBoard.getModel())
+      let response: IResponse
+      const retrievedBoard = await this.boardUseCases.get(formatedName)
+      if (retrievedBoard === null) response = boardDoesNotExists(formatedName)
+      else {
+        const boardOwner: IUser = retrievedBoard.getOwner() as IUser
+        const boardOwnerID: string = boardOwner?._id.toString() ?? null
+        if (boardOwnerID === userRequester) {
+          const enabledBoard: BoardModel = await this.boardUseCases.disable(
+            formatedName
+          )
+          response = boardDisabled(enabledBoard.getModel())
+        } else response = notOwner()
+      }
+      return response
     } catch (error) {
       return unexpectedError()
     }
