@@ -13,9 +13,11 @@ import {
   boardDoesNotExists,
   boardDisabled,
   boardDeleted,
-  updatedBoard,
+  updatedBoardSucessfully,
+  notOwner,
 } from "../../responses/board/boardResponses"
 import { unexpectedError } from "../../core/responses/responses"
+import { IUser } from "@interfaces/IUser"
 
 export class BoardController {
   private readonly boardUseCases: BoardUseCases
@@ -94,17 +96,31 @@ export class BoardController {
       return unexpectedError()
     }
   }
-  async update(board: string, newName: string): Promise<IResponse> {
+  async update(
+    board: string,
+    newName: string,
+    userRequester: string
+  ): Promise<IResponse> {
     const formatedName: string = board.replace(/-/g, " ")
     try {
-      const enabledBoard: BoardModel = await this.boardUseCases.update(
-        formatedName,
-        newName
-      )
-      return enabledBoard === null
-        ? boardDoesNotExists(formatedName)
-        : updatedBoard(enabledBoard.getModel())
+      let response: IResponse
+      const retrievedBoard = await this.boardUseCases.get(formatedName)
+      if (retrievedBoard === null) response = boardDoesNotExists(formatedName)
+      else {
+        const boardOwner: IUser = retrievedBoard.getOwner() as IUser
+        const boardOwnerID: string = boardOwner?._id.toString() ?? null
+        if (boardOwnerID === userRequester) {
+          const updatedBoard: BoardModel = await this.boardUseCases.update(
+            formatedName,
+            newName
+          )
+          response = updatedBoardSucessfully(updatedBoard.getModel())
+        } else response = notOwner()
+      }
+
+      return response
     } catch (error) {
+      console.log(error)
       return unexpectedError()
     }
   }

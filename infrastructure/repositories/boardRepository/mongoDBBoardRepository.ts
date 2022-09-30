@@ -126,11 +126,10 @@ export class MongoDBBoardRepository implements BoardRepository {
       modified_at: new Date(),
     }
     const options: QueryOptions = { new: true }
-    const hiddenFields: string[] = [...this.hiddenFieldsBoard, "-owner"]
     try {
       const deletedBoard = await mongoDBBoard
         .findOneAndUpdate(filter, projection, options)
-        .select(hiddenFields)
+        .select(this.hiddenFieldsBoard)
       return new BoardModel(deletedBoard)
     } catch (error) {
       return error

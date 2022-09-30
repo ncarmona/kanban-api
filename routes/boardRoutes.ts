@@ -118,12 +118,13 @@ export class BoardRoutes implements IRoute {
       requiredParameters(["newName"], RequestObject.BODY),
     ]
     this.core.put(route, middlewares, async (req: Request, res: Response) => {
-      // const { _id: user } = res.locals.user
+      const { _id: userRequester } = res.locals.user
       const { newName } = req.body
       const { name } = req.params
       const response: IResponse = await this.boardController.update(
         name,
-        newName
+        newName,
+        userRequester
       )
       res.status(response.status_code).send(response)
     })

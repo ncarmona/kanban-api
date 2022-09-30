@@ -40,3 +40,12 @@ export function mustBeGuest(): IResponse {
     status_code: 401,
   }
 }
+
+export function notAllowedToPerfom(): IResponse {
+  return {
+    data: {},
+    message:
+      "Request was ok, but you do not have enough permissions to perfom this action",
+    status_code: 405,
+  }
+}

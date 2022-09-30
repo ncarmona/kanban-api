@@ -63,10 +63,17 @@ export function boardDeleted(board: IBoard): IResponse {
     status_code: 404,
   }
 }
-export function updatedBoard(data: IBoard): IResponse {
+export function updatedBoardSucessfully(data: IBoard): IResponse {
   return {
     data,
     message: "Board updated successfully",
     status_code: 200,
+  }
+}
+export function notOwner(): IResponse {
+  return {
+    data: {},
+    message: "Only owner can perform this action",
+    status_code: 401,
   }
 }
