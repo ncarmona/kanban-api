@@ -101,9 +101,11 @@ export class BoardRoutes implements IRoute {
       route,
       middlewares,
       async (req: Request, res: Response) => {
+        const { _id: userRequester } = res.locals.user
         const { name } = req.params
         const response: IResponse = await this.boardController.delete(
-          name as string
+          name as string,
+          userRequester
         )
         res.status(response.status_code).send(response)
       }

@@ -83,15 +83,24 @@ export class BoardController {
       return unexpectedError()
     }
   }
-  async delete(board: string): Promise<IResponse> {
+  async delete(board: string, userRequester: string): Promise<IResponse> {
     const formatedName: string = board.replace(/-/g, " ")
     try {
-      const enabledBoard: BoardModel = await this.boardUseCases.delete(
-        formatedName
-      )
-      return enabledBoard === null
-        ? boardDoesNotExists(formatedName)
-        : boardDeleted(enabledBoard.getModel())
+      let response: IResponse
+      const retrievedBoard = await this.boardUseCases.get(formatedName)
+      if (retrievedBoard === null) response = boardDoesNotExists(formatedName)
+      else {
+        const boardOwner: IUser = retrievedBoard.getOwner() as IUser
+        const boardOwnerID: string = boardOwner?._id.toString() ?? null
+        if (boardOwnerID === userRequester) {
+          const deletedBoard: BoardModel = await this.boardUseCases.delete(
+            formatedName
+          )
+
+          response = boardDeleted(deletedBoard.getModel())
+        } else response = notOwner()
+      }
+      return response
     } catch (error) {
       return unexpectedError()
     }
