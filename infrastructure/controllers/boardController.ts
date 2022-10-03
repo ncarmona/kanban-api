@@ -15,16 +15,25 @@ import {
   boardDeleted,
   updatedBoardSucessfully,
   notOwner,
+  userInvitedToBoard,
 } from "../../responses/board/boardResponses"
 import { unexpectedError } from "../../core/responses/responses"
 import { IUser } from "@interfaces/IUser"
+import { UserRepository } from "@repositories/userRepository/userRepository"
+import { UserUseCases } from "@usecases/userUseCases"
+import { userDoesNotExists } from "@responses/authResponses"
+import { MongoDBUserRepository } from "@repositories/userRepository/mongoDBUserRepository"
 
 export class BoardController {
   private readonly boardUseCases: BoardUseCases
   private readonly mongoDBBoardRepository: BoardRepository
+  private readonly userUseCases: UserUseCases
+  private readonly mongoDBUserRepository: UserRepository
   constructor() {
     this.mongoDBBoardRepository = new MongoDBBoardRepository()
+    this.mongoDBUserRepository = new MongoDBUserRepository()
     this.boardUseCases = new BoardUseCases(this.mongoDBBoardRepository)
+    this.userUseCases = new UserUseCases(this.mongoDBUserRepository)
   }
   async create(name: string, user: string): Promise<IResponse> {
     const board: BoardModel | null = await this.boardUseCases.create(name, user)
@@ -141,6 +150,31 @@ export class BoardController {
           )
           response = updatedBoardSucessfully(updatedBoard.getModel())
         } else response = notOwner()
+      }
+
+      return response
+    } catch (error) {
+      console.log(error)
+      return unexpectedError()
+    }
+  }
+  async inviteUser(board: string, email: string) {
+    const formatedName: string = board.replace(/-/g, " ")
+    try {
+      let response: IResponse
+      const invitedUser = await this.userUseCases.getUserByEmail(email)
+
+      if (invitedUser === null) response = userDoesNotExists()
+      else {
+        const invitedUserID: string = invitedUser.getId()
+        const boardWithInvitedUser = await this.boardUseCases.inviteUser(
+          formatedName,
+          invitedUserID
+        )
+        response = userInvitedToBoard(
+          boardWithInvitedUser.getModel(),
+          invitedUser.getName()
+        )
       }
 
       return response

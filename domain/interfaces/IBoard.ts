@@ -6,4 +6,5 @@ import { IUser } from "./IUser"
 export interface IBoard extends ModelDataAccess, ModelDeleteDisable, Model {
   name: string
   owner: IUser | string
+  participants: IUser[] | string[]
 }

@@ -25,6 +25,12 @@ const schema = new Schema({
     type: Date,
     default: Date.now(),
   },
+  participants: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 })
 const mongoDBBoard = model("Board", schema)
 export { mongoDBBoard }

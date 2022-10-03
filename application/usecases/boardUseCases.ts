@@ -28,4 +28,10 @@ export class BoardUseCases {
   update(board: string, newName: string): Promise<BoardModel> {
     return this.database.update(board, newName)
   }
+  inviteUser(board: string, id: string): Promise<BoardModel> {
+    return this.database.inviteUser(board, id)
+  }
+  kickUser(board: string, id: string[]): Promise<BoardModel> {
+    return this.database.kickUser(board, id)
+  }
 }

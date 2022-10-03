@@ -32,6 +32,7 @@ export class MongoDBBoardRepository implements BoardRepository {
       modified_at: new Date(),
       name,
       owner: user,
+      participants: [],
     }
 
     try {
@@ -131,6 +132,40 @@ export class MongoDBBoardRepository implements BoardRepository {
         .findOneAndUpdate(filter, projection, options)
         .select(this.hiddenFieldsBoard)
       return new BoardModel(deletedBoard)
+    } catch (error) {
+      return error
+    }
+  }
+  async inviteUser(board: string, userID: string): Promise<BoardModel> {
+    try {
+      const filter: FilterQuery<unknown> = { name: board }
+      const projection: ProjectionType<unknown> = {
+        $push: { participants: userID },
+      }
+      const options: QueryOptions = { new: true }
+      const participantAdded = await mongoDBBoard.findOneAndUpdate(
+        filter,
+        projection,
+        options
+      )
+      return new BoardModel(participantAdded)
+    } catch (error) {
+      return error
+    }
+  }
+  async kickUser(board: string, updatedList: string[]): Promise<BoardModel> {
+    try {
+      const filter: FilterQuery<unknown> = { name: board }
+      const projection: ProjectionType<unknown> = {
+        participants: updatedList,
+      }
+      const options: QueryOptions = { new: true }
+      const updatedParticipants = await mongoDBBoard.findOneAndUpdate(
+        filter,
+        projection,
+        options
+      )
+      return new BoardModel(updatedParticipants)
     } catch (error) {
       return error
     }

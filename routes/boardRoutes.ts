@@ -30,6 +30,7 @@ export class BoardRoutes implements IRoute {
     this.disableBoard("/:name/disable")
     this.deleteBoard("/:name")
     this.updateBoard("/:name")
+    this.inviteUser("/:name/invite")
   }
   private createBoard(action?: string) {
     const route =
@@ -131,6 +132,25 @@ export class BoardRoutes implements IRoute {
         name,
         newName,
         userRequester
+      )
+      res.status(response.status_code).send(response)
+    })
+  }
+  private inviteUser(action?: string) {
+    const route =
+      action !== undefined ? this.base_route + action : this.base_route
+    const middlewares = [
+      cors(allowAll),
+      registeredUser(),
+      requiredParameters(["email"], RequestObject.BODY),
+    ]
+    this.core.post(route, middlewares, async (req: Request, res: Response) => {
+      // const { _id: userRequester } = res.locals.user
+      const { email } = req.body
+      const { name } = req.params
+      const response: IResponse = await this.boardController.inviteUser(
+        name,
+        email
       )
       res.status(response.status_code).send(response)
     })

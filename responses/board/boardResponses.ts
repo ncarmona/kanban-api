@@ -77,3 +77,10 @@ export function notOwner(): IResponse {
     status_code: 401,
   }
 }
+export function userInvitedToBoard(board: IBoard, username: string): IResponse {
+  return {
+    data: board,
+    message: `User ${username} has been invited to the board`,
+    status_code: 200,
+  }
+}

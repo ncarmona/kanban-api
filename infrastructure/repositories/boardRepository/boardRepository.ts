@@ -8,4 +8,6 @@ export interface BoardRepository {
   disable(board: string): Promise<BoardModel>
   delete(board: string): Promise<BoardModel>
   update(board: string, newName: string): Promise<BoardModel>
+  inviteUser(board: string, email: string): Promise<BoardModel>
+  kickUser(board: string, email: string[]): Promise<BoardModel>
 }

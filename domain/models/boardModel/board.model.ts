@@ -13,6 +13,7 @@ export class BoardModel {
       _id: board._id,
       name: board.name,
       owner: board.owner,
+      participants: board.participants,
     }
   }
 
@@ -63,6 +64,13 @@ export class BoardModel {
   }
   public setOwner(owner: IUser | string) {
     this._board.owner = owner
+  }
+
+  public getParticipants(): IUser[] | string[] {
+    return this._board.participants
+  }
+  public setParticipants(participants: IUser[] | string[]) {
+    this._board.participants = participants
   }
 
   public getModel(): IBoard {
