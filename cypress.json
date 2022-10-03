@@ -1,5 +1,6 @@
 {
   "e2e": {
-    "baseUrl": "https://localhost:5000/"
+    "baseUrl": "https://localhost:5000/",
+    "experimentalSessionAndOrigin": true
   }
 }

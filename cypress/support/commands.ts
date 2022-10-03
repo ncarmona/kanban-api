@@ -73,3 +73,42 @@ Cypress.Commands.add("activateUser", (qs: { string: string }) => {
     qs: qs,
   })
 })
+Cypress.Commands.add("createBoard", (name?: string) => {
+  return cy.request({
+    url: "/board",
+    method: "POST",
+    body: { name },
+    failOnStatusCode: false,
+  })
+})
+Cypress.Commands.add("deleteBoard", (name?: string) => {
+  cy.request({
+    url: "/board/" + (name ?? ""),
+    method: "DELETE",
+    failOnStatusCode: false,
+  })
+})
+Cypress.Commands.add("updateBoard", (name: string, newName?: string) => {
+  const body = newName === undefined ? {} : { newName }
+  cy.request({
+    url: "/board/" + (name.replace(" ", "-") ?? ""),
+    method: "PUT",
+    body,
+    failOnStatusCode: false,
+  })
+})
+
+Cypress.Commands.add("enableBoard", (boardNameURL: string) => {
+  return cy.request({
+    url: "/board/" + boardNameURL + "/enable",
+    method: "PUT",
+    failOnStatusCode: false,
+  })
+})
+Cypress.Commands.add("disableBoard", (boardNameURL: string) => {
+  return cy.request({
+    url: "/board/" + boardNameURL + "/disable",
+    method: "PUT",
+    failOnStatusCode: false,
+  })
+})
