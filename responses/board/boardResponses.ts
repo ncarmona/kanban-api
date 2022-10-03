@@ -60,7 +60,7 @@ export function boardDeleted(board: IBoard): IResponse {
   return {
     data: board,
     message: `Board ${board.name} has been deleted`,
-    status_code: 404,
+    status_code: 200,
   }
 }
 export function updatedBoardSucessfully(data: IBoard): IResponse {
