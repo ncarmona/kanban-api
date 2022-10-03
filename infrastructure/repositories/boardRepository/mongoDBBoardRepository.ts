@@ -51,6 +51,7 @@ export class MongoDBBoardRepository implements BoardRepository {
       const board: IBoard = await mongoDBBoard
         .findOne(filter)
         .populate("owner", this.hiddenFieldsUser)
+        .populate("participants", this.hiddenFieldsUser)
         .select(this.hiddenFieldsBoard)
       return new BoardModel(board)
     } catch (error) {
