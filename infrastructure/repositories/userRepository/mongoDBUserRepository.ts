@@ -89,4 +89,14 @@ export class MongoDBUserRepository implements UserRepository {
         .catch((e: MongooseError) => reject(e))
     })
   }
+  async getUserByEmail(email: string): Promise<UserModel> {
+    try {
+      const deleted = false
+      const filter: FilterQuery<unknown> = { email, deleted }
+      const user = await mongoDBUser.findOne(filter)
+      return new UserModel(user)
+    } catch (error) {
+      return error
+    }
+  }
 }

@@ -27,4 +27,7 @@ export class UserUseCases {
   getUserData(user: string): Promise<UserModel> {
     return this.database.getUserData(user)
   }
+  getUserByEmail(email: string): Promise<UserModel> {
+    return this.database.getUserByEmail(email)
+  }
 }

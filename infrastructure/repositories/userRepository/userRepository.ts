@@ -7,4 +7,5 @@ export interface UserRepository {
   delete(id: string): Promise<UserModel>
   update(user: IUser): Promise<UserModel>
   getUserData(_id: string): Promise<UserModel>
+  getUserByEmail(email: string): Promise<UserModel>
 }
