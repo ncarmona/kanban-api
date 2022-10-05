@@ -314,4 +314,107 @@ describe("Get board", () => {
       expect(response.body.message).to.equal(undefined)
     })
   })
+  it("Participants can access to board data")
+  it("users who not are owner or participant can not access")
+  it("Participants populated when retrieve board")
+})
+describe("Invite user", () => {
+  const { email, password } = credentials
+  const participant = { email: "participant@gmail.com", password: "123456" }
+
+  beforeEach(() => {
+    cy.session(participant, () => {
+      cy.signup(participant.email, participant.password)
+      cy.activateUser({ email: participant.email, activation_token })
+      cy.signin(participant.email, participant.password)
+      cy.updateUser("participant")
+      cy.signout()
+    })
+    Cypress.session.clearAllSavedSessions()
+    cy.session(credentials, () => {
+      cy.signup(email, password)
+      cy.activateUser({ email, activation_token })
+      cy.signin(email, password)
+    })
+    cy.createBoard(boardName)
+  })
+  afterEach(() => {
+    cy.signout()
+    cy.dropCollections()
+  })
+
+  it("Add participant", () => {
+    cy.request({
+      method: "POST",
+      url: "/board/" + boardNameURL + "/invite",
+      body: { email: participant.email },
+      failOnStatusCode: false,
+    }).then((response: Cypress.Response<IResponse>) => {
+      expect(response.body.status_code).to.equal(200)
+      expect(response.body.message).to.equal(
+        "User participant has been invited to the board"
+      )
+    })
+  })
+  it("participants array can have duplicated participants", () => {
+    cy.request({
+      method: "POST",
+      url: "/board/" + boardNameURL + "/invite",
+      body: { email: participant.email },
+      failOnStatusCode: false,
+    })
+    cy.request({
+      method: "POST",
+      url: "/board/" + boardNameURL + "/invite",
+      body: { email: participant.email },
+      failOnStatusCode: false,
+    }).then((response: Cypress.Response<IResponse>) => {
+      expect(response.body.status_code).to.equal(200)
+      expect(response.body.message).to.equal(
+        "User participant has been invited to the board"
+      )
+      const numParticipants = new Array(
+        response.body.data["participants"]
+      ).flat().length
+      expect(numParticipants).to.equal(1)
+    })
+  })
+  it("user who does not exists can not be added as invited to board", () => {
+    cy.request({
+      method: "POST",
+      url: "/board/" + boardNameURL + "/invite",
+      body: { email: "potato" },
+      failOnStatusCode: false,
+    }).then((response: Cypress.Response<IResponse>) => {
+      expect(response.body.status_code).to.equal(404)
+      expect(response.body.message).to.equal("User does not exists.")
+    })
+  })
+  it("Board must exists in order to add a participant", () => {
+    cy.request({
+      method: "POST",
+      url: "/board/noboard/invite",
+      body: { email: participant.email },
+      failOnStatusCode: false,
+    }).then((response: Cypress.Response<IResponse>) => {
+      expect(response.body.status_code).to.equal(404)
+      expect(response.body.message).to.equal("Board noboard does not exists")
+    })
+  })
+  it("Only owner can add participant", () => {
+    cy.session("participantAsOwner", () => {
+      cy.signin(participant.email, participant.password)
+    })
+    cy.request({
+      method: "POST",
+      url: "/board/" + boardNameURL + "/invite",
+      body: { email: participant.email },
+      failOnStatusCode: false,
+    }).then((response: Cypress.Response<IResponse>) => {
+      expect(response.body.status_code).to.equal(401)
+      expect(response.body.message).to.equal(
+        "Only owner can perform this action"
+      )
+    })
+  })
 })

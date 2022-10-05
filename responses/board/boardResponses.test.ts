@@ -21,6 +21,7 @@ const board: IBoard = {
   disabled: false,
   name: "Board name",
   owner: "111",
+  participants: [],
 }
 
 it("Board responses. createBoardSuccessful", () => {
