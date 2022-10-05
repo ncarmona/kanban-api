@@ -21,7 +21,7 @@ export class UserModel {
   }
 
   public getId(): string | undefined {
-    return this._user._id
+    return this._user?._id ?? undefined
   }
   public setId(_id: string) {
     this._user._id = _id
