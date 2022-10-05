@@ -16,6 +16,9 @@ describe("User model", () => {
     activation_token: "twegewgegsdg",
   }
   beforeEach(() => (userModel = new UserModel(user)))
+  it.only("User model constructor parameter can be nullish", () => {
+    expect(new UserModel(null).getModel()).toBeNull()
+  })
   it("User without ID should no return user with ID", () => {
     const user: IUser = {
       //id: "1",

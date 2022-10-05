@@ -1,21 +1,23 @@
 import { IUser } from "@interfaces/IUser"
 
 export class UserModel {
-  private _user: IUser
+  private _user: IUser | null
 
-  constructor(user: IUser) {
-    this._user = {
-      created_at: user.created_at,
-      deleted: user.deleted,
-      disabled: user.disabled,
-      email: user.email,
-      modified_at: user.modified_at,
-      _id: user._id,
-      name: user.name,
-      password: user.password,
-      photo: user.photo,
-      activation_token: user.activation_token,
-    }
+  constructor(user: IUser | null) {
+    if (user === null) this._user = null
+    else
+      this._user = {
+        created_at: user.created_at,
+        deleted: user.deleted,
+        disabled: user.disabled,
+        email: user.email,
+        modified_at: user.modified_at,
+        _id: user._id,
+        name: user.name,
+        password: user.password,
+        photo: user.photo,
+        activation_token: user.activation_token,
+      }
   }
 
   public getId(): string | undefined {
@@ -88,7 +90,7 @@ export class UserModel {
     this._user.activation_token = activationToken
   }
 
-  public getModel(): IUser {
+  public getModel(): IUser | null {
     return this._user
   }
 }
