@@ -2,19 +2,21 @@ import { IBoard } from "../../interfaces/IBoard"
 import { IUser } from "../../interfaces/IUser"
 
 export class BoardModel {
-  private _board: IBoard
+  private _board: IBoard | null
 
-  constructor(board: IBoard) {
-    this._board = {
-      created_at: board.created_at,
-      deleted: board.deleted,
-      disabled: board.disabled,
-      modified_at: board.modified_at,
-      _id: board._id,
-      name: board.name,
-      owner: board.owner,
-      participants: board.participants,
-    }
+  constructor(board: IBoard | null) {
+    if (board === null) this._board = null
+    else
+      this._board = {
+        created_at: board.created_at,
+        deleted: board.deleted,
+        disabled: board.disabled,
+        modified_at: board.modified_at,
+        _id: board._id,
+        name: board.name,
+        owner: board.owner,
+        participants: board.participants ?? [],
+      }
   }
 
   public getId(): string | undefined {
@@ -73,7 +75,7 @@ export class BoardModel {
     this._board.participants = participants
   }
 
-  public getModel(): IBoard {
+  public getModel(): IBoard | null {
     return this._board
   }
 }
