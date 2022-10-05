@@ -11,6 +11,7 @@ describe("Board model", () => {
     modified_at: new Date(),
     deleted: false,
     disabled: false,
+    participants: [],
   }
   const user: IUser = {
     name: "My username",
@@ -33,7 +34,9 @@ describe("Board model", () => {
   }
 
   beforeEach(() => (boardModel = new BoardModel(board)))
-
+  it("null IBoard as model parameter must return null", () => {
+    expect(new BoardModel(null).getModel()).toBeNull()
+  })
   it("Board without ID should no return board with ID", () => {
     const boardWithoutID: IBoard = { ...board }
     delete boardWithoutID._id
