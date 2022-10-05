@@ -53,8 +53,12 @@ export class BoardRoutes implements IRoute {
       action !== undefined ? this.base_route + action : this.base_route
     const middlewares = [cors(allowAll), registeredUser()]
     this.core.get(route, middlewares, async (req: Request, res: Response) => {
+      const { _id: userRequester } = res.locals.user
       const { name } = req.params
-      const response: IResponse = await this.boardController.get(name as string)
+      const response: IResponse = await this.boardController.get(
+        name as string,
+        userRequester
+      )
       res.status(response.status_code).send(response)
     })
   }
@@ -145,12 +149,13 @@ export class BoardRoutes implements IRoute {
       requiredParameters(["email"], RequestObject.BODY),
     ]
     this.core.post(route, middlewares, async (req: Request, res: Response) => {
-      // const { _id: userRequester } = res.locals.user
+      const { _id: owner } = res.locals.user
       const { email } = req.body
       const { name } = req.params
       const response: IResponse = await this.boardController.inviteUser(
         name,
-        email
+        email,
+        owner
       )
       res.status(response.status_code).send(response)
     })

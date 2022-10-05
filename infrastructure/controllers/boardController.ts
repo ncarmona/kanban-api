@@ -17,12 +17,16 @@ import {
   notOwner,
   userInvitedToBoard,
 } from "../../responses/board/boardResponses"
-import { unexpectedError } from "../../core/responses/responses"
+import {
+  notAllowedToPerfom,
+  unexpectedError,
+} from "../../core/responses/responses"
 import { IUser } from "@interfaces/IUser"
 import { UserRepository } from "@repositories/userRepository/userRepository"
 import { UserUseCases } from "@usecases/userUseCases"
 import { userDoesNotExists } from "@responses/authResponses"
 import { MongoDBUserRepository } from "@repositories/userRepository/mongoDBUserRepository"
+import { UserModel } from "@models/userModel/user.model"
 
 export class BoardController {
   private readonly boardUseCases: BoardUseCases
@@ -45,17 +49,32 @@ export class BoardController {
 
     return response
   }
-  async get(name: string): Promise<IResponse> {
+  async get(name: string, userRequester: string): Promise<IResponse> {
     const formatedName: string = name.replace(/-/g, " ")
     try {
       const boardModel: BoardModel = await this.boardUseCases.get(formatedName)
-
       const boardDoesNotExistsOrDisabled =
         (boardModel !== null && boardModel.getDisabled()) || boardModel === null
+      let response: IResponse
 
-      return boardDoesNotExistsOrDisabled
-        ? boardDoesNotExists(formatedName)
-        : retrievedBoard(boardModel.getModel())
+      if (boardDoesNotExistsOrDisabled)
+        response = boardDoesNotExists(formatedName)
+      else {
+        const owner = (boardModel.getOwner() as IUser)._id.toString()
+        const participants = boardModel.getParticipants() as IUser[]
+        const participantsIDsArray = participants.map((u: IUser) =>
+          u._id.toString()
+        )
+        const authorizedUsers = [...participantsIDsArray, owner]
+        const userRequesterIsAuthorized = authorizedUsers.some(
+          (uid: string) => userRequester === uid
+        )
+
+        response = userRequesterIsAuthorized
+          ? retrievedBoard(boardModel.getModel())
+          : notAllowedToPerfom()
+      }
+      return response
     } catch (error) {
       return unexpectedError()
     }
@@ -158,23 +177,35 @@ export class BoardController {
       return unexpectedError()
     }
   }
-  async inviteUser(board: string, email: string) {
+  async inviteUser(board: string, email: string, owner: string) {
     const formatedName: string = board.replace(/-/g, " ")
     try {
       let response: IResponse
-      const invitedUser = await this.userUseCases.getUserByEmail(email)
-
-      if (invitedUser === null) response = userDoesNotExists()
+      const invitedUser: UserModel = await this.userUseCases.getUserByEmail(
+        email
+      )
+      if (invitedUser?.getId() === undefined) response = userDoesNotExists()
       else {
         const invitedUserID: string = invitedUser.getId()
-        const boardWithInvitedUser = await this.boardUseCases.inviteUser(
-          formatedName,
-          invitedUserID
+        const getBoardData: BoardModel = await this.boardUseCases.get(
+          formatedName
         )
-        response = userInvitedToBoard(
-          boardWithInvitedUser.getModel(),
-          invitedUser.getName()
-        )
+        if (getBoardData.getModel() === null)
+          response = boardDoesNotExists(formatedName)
+        else {
+          const getBoardOwner: IUser = (await getBoardData.getOwner()) as IUser
+          const ownerID: string = getBoardOwner._id.toString()
+          if (ownerID === owner) {
+            const boardWithInvitedUser = await this.boardUseCases.inviteUser(
+              formatedName,
+              invitedUserID
+            )
+            response = userInvitedToBoard(
+              boardWithInvitedUser.getModel(),
+              invitedUser.getName()
+            )
+          } else response = notOwner()
+        }
       }
 
       return response
