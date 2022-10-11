@@ -31,6 +31,7 @@ export class BoardRoutes implements IRoute {
     this.deleteBoard("/:name")
     this.updateBoard("/:name")
     this.inviteUser("/:name/invite")
+    this.kickUser("/:name/kick")
   }
   private createBoard(action?: string) {
     const route =
@@ -159,5 +160,29 @@ export class BoardRoutes implements IRoute {
       )
       res.status(response.status_code).send(response)
     })
+  }
+  private kickUser(action?: string) {
+    const route =
+      action !== undefined ? this.base_route + action : this.base_route
+    const middlewares = [
+      cors(allowAll),
+      registeredUser(),
+      requiredParameters(["email"], RequestObject.BODY),
+    ]
+    this.core.delete(
+      route,
+      middlewares,
+      async (req: Request, res: Response) => {
+        const { _id: owner } = res.locals.user
+        const { email } = req.body
+        const { name } = req.params
+        const response: IResponse = await this.boardController.kickUser(
+          name,
+          email,
+          owner
+        )
+        res.status(response.status_code).send(response)
+      }
+    )
   }
 }

@@ -16,6 +16,7 @@ import {
   updatedBoardSucessfully,
   notOwner,
   userInvitedToBoard,
+  userKickedFromBoard,
 } from "../../responses/board/boardResponses"
 import {
   notAllowedToPerfom,
@@ -208,6 +209,42 @@ export class BoardController {
         }
       }
 
+      return response
+    } catch (error) {
+      return unexpectedError()
+    }
+  }
+  async kickUser(
+    board: string,
+    email: string,
+    owner: string
+  ): Promise<IResponse> {
+    const formatedName: string = board.replace(/-/g, " ")
+    let response: IResponse
+
+    try {
+      const kickedUser = await this.userUseCases.getUserByEmail(email)
+      if (kickedUser?.getId() === undefined) response = userDoesNotExists()
+      else {
+        const boardData = await this.boardUseCases.get(formatedName)
+        if (boardData.getModel() === null)
+          response = boardDoesNotExists(formatedName)
+        else {
+          const boardOwner = boardData.getOwner() as IUser
+          const boardOwnerID = boardOwner._id.toString()
+          if (owner !== boardOwnerID) response = notOwner()
+          else {
+            const boardWithoutKickedUser = await this.boardUseCases.kickUser(
+              formatedName,
+              kickedUser.getId()
+            )
+            response = userKickedFromBoard(
+              boardWithoutKickedUser.getModel(),
+              kickedUser.getName()
+            )
+          }
+        }
+      }
       return response
     } catch (error) {
       console.log(error)

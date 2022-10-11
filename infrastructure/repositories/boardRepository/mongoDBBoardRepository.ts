@@ -141,7 +141,7 @@ export class MongoDBBoardRepository implements BoardRepository {
     try {
       const filter: FilterQuery<unknown> = { name: board }
       const projection: ProjectionType<unknown> = {
-        $push: { participants: userID },
+        $addToSet: { participants: userID },
       }
       const options: QueryOptions = { new: true }
       const participantAdded = await mongoDBBoard.findOneAndUpdate(
@@ -154,11 +154,11 @@ export class MongoDBBoardRepository implements BoardRepository {
       return error
     }
   }
-  async kickUser(board: string, updatedList: string[]): Promise<BoardModel> {
+  async kickUser(board: string, id: string): Promise<BoardModel> {
     try {
       const filter: FilterQuery<unknown> = { name: board }
       const projection: ProjectionType<unknown> = {
-        participants: updatedList,
+        $pull: { participants: id },
       }
       const options: QueryOptions = { new: true }
       const updatedParticipants = await mongoDBBoard.findOneAndUpdate(

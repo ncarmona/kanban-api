@@ -84,3 +84,13 @@ export function userInvitedToBoard(board: IBoard, username: string): IResponse {
     status_code: 200,
   }
 }
+export function userKickedFromBoard(
+  board: IBoard,
+  username: string
+): IResponse {
+  return {
+    data: board,
+    message: `User ${username} has been kicked from the board`,
+    status_code: 200,
+  }
+}

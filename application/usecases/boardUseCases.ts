@@ -31,7 +31,7 @@ export class BoardUseCases {
   inviteUser(board: string, id: string): Promise<BoardModel> {
     return this.database.inviteUser(board, id)
   }
-  kickUser(board: string, id: string[]): Promise<BoardModel> {
+  kickUser(board: string, id: string): Promise<BoardModel> {
     return this.database.kickUser(board, id)
   }
 }

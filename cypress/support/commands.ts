@@ -112,3 +112,26 @@ Cypress.Commands.add("disableBoard", (boardNameURL: string) => {
     failOnStatusCode: false,
   })
 })
+Cypress.Commands.add("inviteToBoard", (boardNameURL: string, email: string) => {
+  return cy.request({
+    method: "POST",
+    url: "/board/" + boardNameURL + "/invite",
+    body: { email },
+    failOnStatusCode: false,
+  })
+})
+Cypress.Commands.add("kickFromBoard", (boardNameURL: string, email: string) => {
+  return cy.request({
+    url: "/board/" + boardNameURL + "/kick",
+    method: "DELETE",
+    body: { email },
+    failOnStatusCode: false,
+  })
+})
+Cypress.Commands.add("getBoard", (boardNameURL: string) => {
+  return cy.request({
+    method: "GET",
+    url: "/board/" + boardNameURL,
+    failOnStatusCode: false,
+  })
+})

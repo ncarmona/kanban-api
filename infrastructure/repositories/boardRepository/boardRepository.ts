@@ -9,5 +9,5 @@ export interface BoardRepository {
   delete(board: string): Promise<BoardModel>
   update(board: string, newName: string): Promise<BoardModel>
   inviteUser(board: string, email: string): Promise<BoardModel>
-  kickUser(board: string, email: string[]): Promise<BoardModel>
+  kickUser(board: string, id: string): Promise<BoardModel>
 }

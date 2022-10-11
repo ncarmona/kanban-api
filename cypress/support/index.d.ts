@@ -24,5 +24,14 @@ declare namespace Cypress {
       name: string,
       newName?
     ): Cypress.Chainable<Cypress.Response<unknown>>
+    inviteToBoard(
+      boardName: string,
+      email: string
+    ): Cypress.Chainable<Cypress.Response<unknown>>
+    kickFromBoard(
+      boardName: string,
+      email: string
+    ): Cypress.Chainable<Cypress.Response<unknown>>
+    getBoard(boardName: string): Cypress.Chainable<Cypress.Response<unknown>>
   }
 }
