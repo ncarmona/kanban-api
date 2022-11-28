@@ -1,139 +1,128 @@
 import { IUser } from "../../interfaces/IUser"
 import { UserModel } from "./user.model"
-
-describe("User model", () => {
+const user: IUser = {
+  _id: "1",
+  created_at: new Date(),
+  deleted: false,
+  disabled: false,
+  email: "mail@fake.com",
+  name: "user name",
+  password: "secretpassword",
+  modified_at: new Date(),
+  photo: "picture.png",
+  activation_token: "twegewgegsdg",
+}
+describe("Non nullish user model", () => {
   let userModel: UserModel
-  const user: IUser = {
-    _id: "1",
-    created_at: new Date(),
-    deleted: false,
-    disabled: false,
-    email: "mail@fake.com",
-    name: "user name",
-    password: "secretpassword",
-    modified_at: new Date(),
-    photo: "picture.png",
-    activation_token: "twegewgegsdg",
-  }
   beforeEach(() => (userModel = new UserModel(user)))
-  it("User model constructor parameter can be nullish", () => {
-    expect(new UserModel(null).getModel()).toBeNull()
+  it("Model attribute must return user object", () => {
+    expect(userModel.model).toStrictEqual(user)
   })
-  it("User without ID should no return user with ID", () => {
-    const user: IUser = {
-      //id: "1",
-      created_at: new Date(),
-      deleted: false,
-      disabled: false,
-      email: "mail@fake.com",
-      name: "user name",
-      password: "secretpassword",
-      modified_at: new Date(),
-      photo: "picture.png",
-      activation_token: "twegewgegsdg",
-    }
-    const userModel: UserModel = new UserModel(user)
-    const userID = userModel.getId()
-
-    expect(userID).toBeUndefined()
+  it("Get user id", () => expect(userModel.id).toStrictEqual(user._id))
+  it("Get created_at", () =>
+    expect(userModel.createdAt).toStrictEqual(user.created_at))
+  it("Get deleted", () => expect(userModel.deleted).toBe(user.deleted))
+  it("Set deleted", () => {
+    userModel.deleted = true
+    expect(userModel.deleted).toBeTruthy()
   })
-  it("User with ID should no return user with ID", () => {
-    const userID = userModel.getId()
-
-    expect(userID).toBe(user._id)
+  it("Get disabled", () => expect(userModel.disabled).toBe(user.disabled))
+  it("Set disabled", () => {
+    userModel.disabled = true
+    expect(userModel.disabled).toBeTruthy()
   })
-  it("Set ID should assign an ID to user", () => {
-    const expectedID = "2"
-    userModel.setId(expectedID)
-
-    expect(userModel.getId()).toBe(expectedID)
+  it("Get email", () => expect(userModel.email).toBe(user.email))
+  it("Set email", () => {
+    const email = "fak2@mail.com"
+    userModel.email = email
+    expect(userModel.email).toStrictEqual(email)
   })
-
-  it("User name must be the same in the model and the IUser", () => {
-    expect(userModel.getName()).toStrictEqual(user.name)
+  it("Get password", () => expect(userModel.password).toBe(user.password))
+  it("Set password", () => {
+    const password = "tttttt"
+    userModel.password = password
+    expect(userModel.password).toStrictEqual(password)
   })
-  it("User name must be assigned with setName", () => {
-    const name = "user2"
-    userModel.setName(name)
-
-    expect(userModel.getName()).toStrictEqual(name)
-  })
-
-  it("Password must be the same in the model and the IUser", () => {
-    expect(userModel.getPassword()).toStrictEqual(user.password)
-  })
-  it("User password must be assigned with setPassword", () => {
-    const password = "secretP"
-    userModel.setPassword(password)
-
-    expect(userModel.getPassword()).toStrictEqual(password)
-  })
-
-  it("Email must be the same in the model and the IUser", () => {
-    expect(userModel.getEmail()).toStrictEqual(user.email)
-  })
-  it("User email must be assigned with setEmail", () => {
-    const email = "mail@mail.com"
-    userModel.setEmail(email)
-
-    expect(userModel.getEmail()).toStrictEqual(email)
-  })
-
-  it("Disabled must be the same in the model and the IUser", () => {
-    expect(userModel.getDisabled()).toStrictEqual(user.disabled)
-  })
-  it("User disabled must be assigned with setDisabled", () => {
-    const disabled = true
-    userModel.setDisabled(disabled)
-
-    expect(userModel.getDisabled()).toStrictEqual(disabled)
-  })
-
-  it("Deleted must be the same in the model and the IUser", () => {
-    expect(userModel.getDeleted()).toStrictEqual(user.deleted)
-  })
-  it("User deleted must be assigned with setDeleted", () => {
-    const deleted = true
-    userModel.setDeleted(deleted)
-
-    expect(userModel.getDeleted()).toStrictEqual(deleted)
-  })
-
-  it("Modified_at must be the same in the model and the IUser", () => {
-    expect(userModel.getModifiedAt()).toStrictEqual(user.modified_at)
-  })
-  it("User modified_at must be assigned with setModifiedAt", () => {
+  it("Get modified at", () =>
+    expect(userModel.modifiedAt).toBe(user.modified_at))
+  it("Set modified at", () => {
     const modified_at = new Date()
-    userModel.setModifiedAt(modified_at)
+    userModel.modifiedAt = modified_at
+    expect(userModel.modifiedAt).toStrictEqual(modified_at)
+  })
+  it("Get photo", () => expect(userModel.photo).toBe(user.photo))
+  it("Set photo", () => {
+    const photo = "new_photo.jpeg"
+    userModel.photo = photo
+    expect(userModel.photo).toStrictEqual(photo)
+  })
+  it("Get activation token", () =>
+    expect(userModel.activationToken).toBe(user.activation_token))
+  it("Set activation token", () => {
+    const token = "12345"
+    userModel.activationToken = token
+    expect(userModel.activationToken).toStrictEqual(token)
+  })
+})
 
-    expect(userModel.getModifiedAt()).toStrictEqual(modified_at)
+describe("Nullish user model", () => {
+  let userModel: UserModel
+  const throwNullModel = "User model is null."
+  beforeEach(() => (userModel = new UserModel(null)))
+  it("Null parameter must create a nullish model", () =>
+    expect(userModel.model).toBeNull())
+  it("Null model must return null id", () => expect(userModel.id).toBeNull())
+  it("Null model must return null created_at", () =>
+    expect(userModel.createdAt).toBeNull())
+  it("Null model must return null deleted", () =>
+    expect(userModel.deleted).toBeNull())
+  it("Delete field can not be modified in nullish model", () => {
+    expect(() => {
+      userModel.deleted = false
+    }).toThrow(throwNullModel)
   })
-
-  it("Created_at must be the same in the model and the IUser", () => {
-    expect(userModel.getCreatedAt()).toStrictEqual(user.created_at)
+  it("Null model must return null disabled", () =>
+    expect(userModel.disabled).toBeNull())
+  it("Disabled field can not be modified in nullish model", () => {
+    expect(() => {
+      userModel.disabled = false
+    }).toThrow(throwNullModel)
   })
-  it("User created_at must be assigned with setCreatedAt", () => {
-    const created_at = new Date()
-    userModel.setCreatedAt(created_at)
-
-    expect(userModel.getCreatedAt()).toStrictEqual(created_at)
+  it("Null model must return null email", () =>
+    expect(userModel.email).toBeNull())
+  it("Email field can not be modified in nullish model", () => {
+    expect(() => {
+      userModel.email = user.email
+    }).toThrow(throwNullModel)
   })
-  it("User photo must be the same in the model and the IUser", () => {
-    expect(userModel.getPhoto()).toStrictEqual(user.photo)
+  it("Null model must return null name", () =>
+    expect(userModel.name).toBeNull())
+  it("Name field can not be modified in nullish model", () => {
+    expect(() => {
+      userModel.name = user.name
+    }).toThrow(throwNullModel)
   })
-  it("User photo must be assigned with setPhoto", () => {
-    const photo = "photo2.png"
-    userModel.setPhoto(photo)
-
-    expect(userModel.getPhoto()).toStrictEqual(photo)
+  it("Null model must return null password", () =>
+    expect(userModel.password).toBeNull())
+  it("Password field can not be modified in nullish model", () => {
+    expect(() => {
+      userModel.password = user.password
+    }).toThrow(throwNullModel)
   })
-  it("User activation token must be the same in the model and the IUser", () => {
-    expect(userModel.getActivationToken()).toStrictEqual(user.activation_token)
+  it("Null model must return null modified_at", () =>
+    expect(userModel.modifiedAt).toBeNull())
+  it("Modified_at field can not be modified in nullish model", () => {
+    expect(() => {
+      userModel.modifiedAt = user.modified_at
+    }).toThrow(throwNullModel)
   })
-  it("User activation token must be assigned with setPhoto", () => {
-    const activation_token = "sdggdsgdshdfhfh"
-    userModel.setActivationToken(activation_token)
-
-    expect(userModel.getActivationToken()).toStrictEqual(activation_token)
+  it("Null model must return null photo", () =>
+    expect(userModel.photo).toBeNull())
+  it("Photo field can not be modified in nullish model", () => {
+    expect(() => {
+      userModel.photo = user.photo
+    }).toThrow(throwNullModel)
   })
+  it("Null model must return null activation token", () =>
+    expect(userModel.activationToken).toBeNull())
 })

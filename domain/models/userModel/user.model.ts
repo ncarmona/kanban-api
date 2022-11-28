@@ -1,96 +1,98 @@
 import { IUser } from "@interfaces/IUser"
 
 export class UserModel {
-  private _user: IUser | null
+  private readonly _user: IUser | null
 
   constructor(user: IUser | null) {
-    if (user === null) this._user = null
-    else
-      this._user = {
-        created_at: user.created_at,
-        deleted: user.deleted,
-        disabled: user.disabled,
-        email: user.email,
-        modified_at: user.modified_at,
-        _id: user._id,
-        name: user.name,
-        password: user.password,
-        photo: user.photo,
-        activation_token: user.activation_token,
-      }
+    this._user =
+      {
+        _id: user?._id ?? null,
+        activation_token: user?.activation_token ?? null,
+        created_at: user?.created_at ?? null,
+        deleted: user?.deleted ?? null,
+        disabled: user?.disabled ?? null,
+        email: user?.email ?? null,
+        modified_at: user?.modified_at ?? null,
+        name: user?.name ?? null,
+        password: user?.password ?? null,
+        photo: user?.photo,
+      } ?? null
   }
 
-  public getId(): string | undefined {
-    return this._user?._id ?? undefined
-  }
-  public setId(_id: string) {
-    this._user._id = _id
+  public get id(): string {
+    return this._user._id?.toString() ?? null
   }
 
-  public getName(): string {
+  public get name(): string {
     return this._user.name
   }
-  public setName(name: string) {
-    this._user.name = name
+  public set name(name: string) {
+    if (this._user.name) this._user.name = name
+    else throw new Error("User model is null.")
   }
 
-  public getPassword(): string {
+  public get password(): string {
     return this._user.password
   }
-  public setPassword(password: string) {
-    this._user.password = password
+  public set password(password: string) {
+    if (this._user.password) this._user.password = password
+    else throw new Error("User model is null.")
   }
 
-  public getEmail(): string {
+  public get email(): string {
     return this._user.email
   }
-  public setEmail(email: string) {
-    this._user.email = email
+  public set email(email: string) {
+    if (this._user.email) this._user.email = email
+    else throw new Error("User model is null.")
   }
 
-  public getDisabled(): boolean {
+  public get disabled(): boolean {
     return this._user.disabled
   }
-  public setDisabled(disabled: boolean) {
-    this._user.disabled = disabled
+  public set disabled(disabled: boolean) {
+    if (typeof this._user.disabled === "boolean") this._user.disabled = disabled
+    else throw new Error("User model is null.")
   }
 
-  public getDeleted(): boolean {
+  public get deleted(): boolean {
     return this._user.deleted
   }
-  public setDeleted(deleted: boolean) {
-    this._user.deleted = deleted
+  public set deleted(deleted: boolean) {
+    if (typeof this._user.deleted === "boolean") this._user.deleted = deleted
+    else throw new Error("User model is null.")
   }
 
-  public getModifiedAt(): Date {
+  public get modifiedAt(): Date {
     return this._user.modified_at
   }
-  public setModifiedAt(date: Date) {
-    this._user.modified_at = new Date(date)
+  public set modifiedAt(date: Date) {
+    if (this._user.modified_at) this._user.modified_at = date
+    else throw new Error("User model is null.")
   }
 
-  public getCreatedAt(): Date {
+  public get createdAt(): Date {
     return this._user.created_at
   }
-  public setCreatedAt(date: Date) {
-    this._user.created_at = new Date(date)
+
+  public get photo(): string {
+    return this._user.photo ?? null
+  }
+  public set photo(photo: string) {
+    if (this._user.photo) this._user.photo = photo
+    else throw new Error("User model is null.")
   }
 
-  public getPhoto(): string {
-    return this._user.photo
-  }
-  public setPhoto(photo: string) {
-    this._user.photo = photo
-  }
-
-  public getActivationToken(): string {
+  public get activationToken(): string {
     return this._user.activation_token
   }
-  public setActivationToken(activationToken: string) {
-    this._user.activation_token = activationToken
+  public set activationToken(activationToken: string) {
+    if (this._user.activation_token)
+      this._user.activation_token = activationToken
+    else throw new Error("User model is null.")
   }
 
-  public getModel(): IUser | null {
-    return this._user
+  public get model(): IUser {
+    return this._user._id ? this._user : null
   }
 }
