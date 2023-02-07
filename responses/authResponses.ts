@@ -3,7 +3,7 @@ import { IResponse } from "@core/routes/IResponse"
 
 export function signupSuccessful(data: IUser): IResponse {
   return {
-    data: clearSensitiveFields(data),
+    data,
     message: "User created successfully",
     status_code: 200,
   }
@@ -57,7 +57,7 @@ export function userDisabled(email: string): IResponse {
 
 export function userSigninSuccessfully(data: IUser): IResponse {
   return {
-      data: clearSensitiveFields(data),
+    data,
     message: "User signin successfully.",
     status_code: 200,
   }
@@ -108,17 +108,4 @@ export function userHasBeenUpdated(data: IUser): IResponse {
     message: "User has been updated successfully.",
     status_code: 200,
   }
-}
-
-function clearSensitiveFields(data: IUser): unknown {
-  const output = { ...data }
-  delete output.password
-  delete output.deleted
-  delete output.disabled
-  delete output.activation_token
-  if (!output.name) delete data.name
-  if (!output.photo) delete data.photo
-  delete output._id
-
-  return output
 }
