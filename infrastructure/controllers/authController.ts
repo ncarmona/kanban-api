@@ -56,13 +56,12 @@ export class AuthController {
 
     try {
       const user: UserModel = await this.authUseCases.signup(auth)
-      const userObject: IUser = user.model
-      if (environmentIs(Environments.PROD))
-        await this.sendActivationEmail(userObject)
+      const userObject: IUser = user.getModel()
+      if (environmentIs(Environments.PROD)) this.sendActivationEmail(userObject)
+
       delete userObject.password
       delete userObject.activation_token
       delete userObject._id
-
       response = signupSuccessful(userObject)
     } catch (error) {
       if (error === "Email already exists.") response = emailAlreadyExists()
@@ -76,7 +75,7 @@ export class AuthController {
 
     try {
       const user: UserModel = await this.authUseCases.activate(auth)
-      response = activationSuccessful(user.email)
+      response = activationSuccessful(user.getEmail())
     } catch (error) {
       if (error === "User already activated") response = userAlreadyActivated()
       else response = unexpectedError()
@@ -88,9 +87,9 @@ export class AuthController {
 
     try {
       const user: UserModel = await this.authUseCases.signin(auth)
-      response = user.disabled
-        ? userDisabled(user.email)
-        : userSigninSuccessfully(user.model)
+      response = user.getDisabled()
+        ? userDisabled(user.getEmail())
+        : userSigninSuccessfully(user.getModel())
     } catch (error) {
       if (error === null) response = userDoesNotExists()
     }

@@ -4,7 +4,3 @@ docker
 .env
 keys/**
 uploads/**
-envs/.dev.env
-envs/.test.env
-compose/*.js
-.idea/**

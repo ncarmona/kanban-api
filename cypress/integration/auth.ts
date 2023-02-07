@@ -78,8 +78,8 @@ describe("Signup user", () => {
         "email",
         "ncarm89@gmail.com"
       )
-      expect(response.body.data).to.not.haveOwnProperty("deleted", false)
-      expect(response.body.data).to.not.haveOwnProperty("disabled", true)
+      expect(response.body.data).to.haveOwnProperty("deleted", false)
+      expect(response.body.data).to.haveOwnProperty("disabled", true)
 
       expect(response.body.message).to.eq(expectedMessage)
     })
