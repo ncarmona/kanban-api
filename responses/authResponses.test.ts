@@ -21,6 +21,13 @@ const userData: IUser = {
   disabled: true,
   email: "mail@fake.com",
 }
+const filteredData = (userData: IUser) => {
+  const filteredData = { ...userData }
+  delete filteredData.deleted
+  delete filteredData.disabled
+
+  return filteredData
+}
 describe("Auth responses. SignupSuccessful", () => {
   const status_code = 200
   const createdOK = "User created successfully"
@@ -29,7 +36,7 @@ describe("Auth responses. SignupSuccessful", () => {
     response = signupSuccessful(userData)
   })
   it("data field must be the same as user data", () => {
-    expect(response.data).toBe(userData)
+    expect(response.data).toStrictEqual(filteredData(userData))
   })
   it("Status code must be 200", () => {
     expect(response.status_code).toBe(status_code)
@@ -128,7 +135,7 @@ describe("User signin successfully", () => {
     expect(response.status_code).toBe(status_code)
   })
   it("User data must be the same as pased by parameter.", () => {
-    expect(response.data).toStrictEqual(userData)
+    expect(response.data).toStrictEqual(filteredData(userData))
   })
 })
 
