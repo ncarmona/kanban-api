@@ -2,4 +2,5 @@
 module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
+  testPathIgnorePatterns: ['compose/initdb.test.js'],
 }
