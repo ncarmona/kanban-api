@@ -1,10 +1,12 @@
 node_modules
 dist
 docker
-.env
+.env.example
 keys/**
 uploads/**
 envs/.dev.env
 envs/.test.env
 compose/*.js
 .idea/**
+/cypress/screenshots/**
+/cypress/videos/**
