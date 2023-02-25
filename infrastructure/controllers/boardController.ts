@@ -1,9 +1,9 @@
-import { IResponse } from "../../core/routes/IResponse"
-import { BoardUseCases } from "../../application/usecases/boardUseCases"
-import { MongoDBBoardRepository } from "../repositories/boardRepository/mongoDBBoardRepository"
-import { BoardRepository } from "../repositories/boardRepository/boardRepository"
-import { BoardModel } from "../../domain/models/boardModel/board.model"
-import { IBoard } from "../../domain/interfaces/IBoard"
+import { IResponse } from "@core/routes/IResponse"
+import { BoardUseCases } from "@usecases/boardUseCases"
+import { MongoDBBoardRepository } from "@repositories/boardRepository/mongoDBBoardRepository"
+import { BoardRepository } from "@repositories/boardRepository/boardRepository"
+import { BoardModel } from "@models/boardModel/board.model"
+import { IBoard } from "@interfaces/IBoard"
 import {
   createBoardSuccessful,
   retrievedBoard,
@@ -17,11 +17,8 @@ import {
   notOwner,
   userInvitedToBoard,
   userKickedFromBoard,
-} from "../../responses/board/boardResponses"
-import {
-  notAllowedToPerfom,
-  unexpectedError,
-} from "../../core/responses/responses"
+} from "@responses/board/boardResponses"
+import { notAllowedToPerfom, unexpectedError } from "@core/responses/responses"
 import { IUser } from "@interfaces/IUser"
 import { UserRepository } from "@repositories/userRepository/userRepository"
 import { UserUseCases } from "@usecases/userUseCases"
@@ -185,9 +182,9 @@ export class BoardController {
       const invitedUser: UserModel = await this.userUseCases.getUserByEmail(
         email
       )
-      if (invitedUser?.getId() === undefined) response = userDoesNotExists()
+      if (invitedUser?.id === undefined) response = userDoesNotExists()
       else {
-        const invitedUserID: string = invitedUser.getId()
+        const invitedUserID: string = invitedUser.id
         const getBoardData: BoardModel = await this.boardUseCases.get(
           formatedName
         )
@@ -203,7 +200,7 @@ export class BoardController {
             )
             response = userInvitedToBoard(
               boardWithInvitedUser.getModel(),
-              invitedUser.getName()
+              invitedUser.name
             )
           } else response = notOwner()
         }
@@ -224,7 +221,7 @@ export class BoardController {
 
     try {
       const kickedUser = await this.userUseCases.getUserByEmail(email)
-      if (kickedUser?.getId() === undefined) response = userDoesNotExists()
+      if (kickedUser?.id === undefined) response = userDoesNotExists()
       else {
         const boardData = await this.boardUseCases.get(formatedName)
         if (boardData.getModel() === null)
@@ -236,11 +233,11 @@ export class BoardController {
           else {
             const boardWithoutKickedUser = await this.boardUseCases.kickUser(
               formatedName,
-              kickedUser.getId()
+              kickedUser.id
             )
             response = userKickedFromBoard(
               boardWithoutKickedUser.getModel(),
-              kickedUser.getName()
+              kickedUser.name
             )
           }
         }

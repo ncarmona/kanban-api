@@ -17,7 +17,7 @@ import {
   uploadProfilePhoto as uploadAWSProfilePhoto,
 } from "../../utils/s3aws"
 import { AWSError, S3 } from "aws-sdk"
-import { removeTempFile } from "../../utils/fs"
+import { removeTempFile } from "@utils/fs"
 
 export class UserController {
   private readonly userUseCases: UserUseCases
@@ -33,7 +33,7 @@ export class UserController {
 
     try {
       const user: UserModel = await this.userUseCases.disable(id)
-      response = user.getDisabled() ? userHasBeenDisabled() : unexpectedError()
+      response = user.disabled ? userHasBeenDisabled() : unexpectedError()
     } catch (error) {
       response = error === null ? userDoesNotExists() : unexpectedError()
     }
@@ -46,7 +46,7 @@ export class UserController {
 
     try {
       const user: UserModel = await this.userUseCases.enable(id)
-      response = !user.getDisabled() ? userHasBeenEnabled() : unexpectedError()
+      response = !user.disabled ? userHasBeenEnabled() : unexpectedError()
     } catch (error) {
       response = error === null ? userDoesNotExists() : unexpectedError()
     }
@@ -59,7 +59,7 @@ export class UserController {
 
     try {
       const user: UserModel = await this.userUseCases.delete(id)
-      response = user.getDeleted() ? userHasBeenDeleted() : unexpectedError()
+      response = user.deleted ? userHasBeenDeleted() : unexpectedError()
     } catch (error) {
       response = error === null ? userDoesNotExists() : unexpectedError()
     }
@@ -99,8 +99,8 @@ export class UserController {
     try {
       const getUser: UserModel = await this.userUseCases.getUserData(user._id)
       if (photo !== undefined) {
-        photo.originalname = this.getPhotoName(getUser.getModel(), photo)
-        this.uploadProfilePhoto(user, photo)
+        photo.originalname = this.getPhotoName(getUser.model, photo)
+        await this.uploadProfilePhoto(user, photo)
         user.photo = getPublicFileURL(
           "kanban-uploads",
           "eu-west-3",
@@ -108,8 +108,8 @@ export class UserController {
         )
       }
       const userModel: UserModel = await this.userUseCases.update(user)
-      response = !userModel.getDisabled()
-        ? userHasBeenUpdated(userModel.getModel())
+      response = !userModel.disabled
+        ? userHasBeenUpdated(userModel.model)
         : unexpectedError()
     } catch (error) {
       console.log(error)
@@ -123,8 +123,8 @@ export class UserController {
     let response: IResponse
     try {
       const userModel: UserModel = await this.userUseCases.getUserData(id)
-      response = !userModel.getDisabled()
-        ? userHasBeenUpdated(userModel.getModel())
+      response = !userModel.disabled
+        ? userHasBeenUpdated(userModel.model)
         : unexpectedError()
     } catch (error) {
       response = error === null ? userDoesNotExists() : unexpectedError()
