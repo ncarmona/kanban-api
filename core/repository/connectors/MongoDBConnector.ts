@@ -1,8 +1,5 @@
 import { IConnector } from "./IConnector"
 import Mongoose from "mongoose"
-import { config as dotEnvConfig } from "dotenv"
-
-dotEnvConfig()
 
 export class MongoDBConnector implements IConnector {
   connectionString?: string
@@ -21,10 +18,9 @@ export class MongoDBConnector implements IConnector {
       DATABASE_PROTOCOL: protocol,
     } = process.env
 
-    const uri: string =
+    return (
       protocol + "://" + user + ":" + password + "@" + server + "/" + db + ""
-
-    return uri
+    )
   }
 
   link(): Promise<typeof import("mongoose")> {

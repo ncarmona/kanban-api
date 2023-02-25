@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "tsc & node .",
-    "dev": "tsc -w & nodemon .",
+    "dev": "export EXEC_MODE=dev ; tsc -w & nodemon .",
+    "dev:e2e": "export EXEC_MODE=test ; tsc -w & nodemon .",
     "test:unit": "jest",
     "test:e2e": "cypress open"
   },

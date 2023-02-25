@@ -1,6 +1,8 @@
 import { S3, AWSError, Request } from "aws-sdk"
 import { config as dotEnvConfig } from "dotenv"
 import fs from "fs"
+import { setEnvironment } from "@core/environment"
+setEnvironment()
 
 dotEnvConfig()
 

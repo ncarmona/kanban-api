@@ -1,3 +1,6 @@
 import { config as dotEnvConfig } from "dotenv"
 
-dotEnvConfig()
+export function setEnvironment() {
+  const path: string = "envs/." + process.env.EXEC_MODE + ".env"
+  dotEnvConfig({path})
+}

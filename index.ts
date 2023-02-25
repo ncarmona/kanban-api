@@ -1,13 +1,11 @@
-/* eslint-disable prettier/prettier */
 require("module-alias/register")
-
-import { config as dotEnvConfig } from "dotenv"
-dotEnvConfig()
+import { setEnvironment } from "@core/environment"
+setEnvironment()
 import { IConnector } from "@core/repository/connectors/IConnector"
 import { MongoDBConnector } from "@core/repository/connectors/MongoDBConnector"
 import express, { Application } from "express"
 import bodyParser from "body-parser"
-import { router } from "./core/router"
+import { router } from "@core/router"
 import helmet from "helmet"
 import fs from "fs"
 import path from "path"
@@ -41,10 +39,10 @@ https
     app
   )
   .listen(port, async () => {
-  connector = new MongoDBConnector()
-  try {
-    await connector.link()
-  } catch (error) {
-    console.error(error)
-  }
-})
+    connector = new MongoDBConnector()
+    try {
+      await connector.link()
+    } catch (error) {
+      console.error(error)
+    }
+  })
